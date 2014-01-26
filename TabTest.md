@@ -1,4 +1,4 @@
-Title
+﻿Title
 ========================================================
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring web pages (click the **MD** toolbar button for help on Markdown).
@@ -143,23 +143,15 @@ xtable(head(mtcars[, 1:5]))
 ```
 
 ```
-## % latex table generated in R 3.0.0 by xtable 1.7-1 package
-## % Sun Jan 26 20:04:36 2014
-## \begin{table}[ht]
-## \centering
-## \begin{tabular}{rrrrrr}
-##   \hline
-##  & mpg & cyl & disp & hp & drat \\ 
-##   \hline
-## Mazda RX4 & 21.00 & 6.00 & 160.00 & 110.00 & 3.90 \\ 
-##   Mazda RX4 Wag & 21.00 & 6.00 & 160.00 & 110.00 & 3.90 \\ 
-##   Datsun 710 & 22.80 & 4.00 & 108.00 & 93.00 & 3.85 \\ 
-##   Hornet 4 Drive & 21.40 & 6.00 & 258.00 & 110.00 & 3.08 \\ 
-##   Hornet Sportabout & 18.70 & 8.00 & 360.00 & 175.00 & 3.15 \\ 
-##   Valiant & 18.10 & 6.00 & 225.00 & 105.00 & 2.76 \\ 
-##    \hline
-## \end{tabular}
-## \end{table}
+<TABLE >
+<TR> <TH>  </TH> <TH> mpg </TH> <TH> cyl </TH> <TH> disp </TH> <TH> hp </TH> <TH> drat </TH>  </TR>
+  <TR> <TD align="right"> Mazda RX4 </TD> <TD align="right"> 21.00 </TD> <TD align="right"> 6.00 </TD> <TD align="right"> 160.00 </TD> <TD align="right"> 110.00 </TD> <TD align="right"> 3.90 </TD> </TR>
+  <TR> <TD align="right"> Mazda RX4 Wag </TD> <TD align="right"> 21.00 </TD> <TD align="right"> 6.00 </TD> <TD align="right"> 160.00 </TD> <TD align="right"> 110.00 </TD> <TD align="right"> 3.90 </TD> </TR>
+  <TR> <TD align="right"> Datsun 710 </TD> <TD align="right"> 22.80 </TD> <TD align="right"> 4.00 </TD> <TD align="right"> 108.00 </TD> <TD align="right"> 93.00 </TD> <TD align="right"> 3.85 </TD> </TR>
+  <TR> <TD align="right"> Hornet 4 Drive </TD> <TD align="right"> 21.40 </TD> <TD align="right"> 6.00 </TD> <TD align="right"> 258.00 </TD> <TD align="right"> 110.00 </TD> <TD align="right"> 3.08 </TD> </TR>
+  <TR> <TD align="right"> Hornet Sportabout </TD> <TD align="right"> 18.70 </TD> <TD align="right"> 8.00 </TD> <TD align="right"> 360.00 </TD> <TD align="right"> 175.00 </TD> <TD align="right"> 3.15 </TD> </TR>
+  <TR> <TD align="right"> Valiant </TD> <TD align="right"> 18.10 </TD> <TD align="right"> 6.00 </TD> <TD align="right"> 225.00 </TD> <TD align="right"> 105.00 </TD> <TD align="right"> 2.76 </TD> </TR>
+   </TABLE>
 ```
 
 
