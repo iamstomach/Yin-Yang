@@ -34,15 +34,31 @@ raw4 <- raw4[order(raw4$order_date), ]
 
 
 ## 预测后一天的订单量
-pre_pct$rr1 <- c(0, pre_pct[-dim(pre_pct)[1], "pre_pct"]) / pre_pct[, "pre_pct"]
-raw5 <- merge(raw4, pre_pct, by = "pre_days")
+pre_pct2 <- pre_pct[order(-pre_pct$pre_days), ]
+
+for (i in 1:7){
+  pre_pct2[, 2+i] <- c(pre_pct2[-(1:i), "pre_pct"], rep(0, i) ) / pre_pct2[, "pre_pct"]
+}
+names(pre_pct2)[3:9] <- paste("rr", 1:7, sep="")
+raw5 <- merge(raw4, pre_pct2, by = "pre_days")
 raw5 <- raw5[order(raw5$order_date), ]
 
-raw5$predict_vol <- raw5$vol * raw5$rr1
+raw5$predict_vol1 <- raw5$vol * raw5$rr1
+raw5$predict_vol2 <- raw5$vol * raw5$rr2
+raw5$predict_vol3 <- raw5$vol * raw5$rr3
+raw5$predict_vol4 <- raw5$vol * raw5$rr4
+raw5$predict_vol5 <- raw5$vol * raw5$rr5
+raw5$predict_vol6 <- raw5$vol * raw5$rr6
+raw5$predict_vol7 <- raw5$vol * raw5$rr7
 
-compare_vol <- aggregate( cbind(vol, predict_vol)  ~ order_date, data=raw5, sum)
+
+compare_vol <- aggregate( cbind(vol, predict_vol1,predict_vol2,predict_vol3,predict_vol4,predict_vol5,predict_vol6,predict_vol7)  ~ order_date, data=raw5, sum)
 
 write.csv(compare_vol, "compare_vol.csv")
+
+c(0, 0, 0, pre_pct[ , "pre_pct"]) / pre_pct[, "pre_pct"]
+
+cbind( pre_pct$pre_pct, lag(pre_pct$pre_pct))
 
 
 
