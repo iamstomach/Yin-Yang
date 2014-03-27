@@ -1,3 +1,63 @@
+setwd("E:\\CP\\predict")
+raw0 <- read.csv("tt.csv", header = T, stringsAsFactors = F)
+head(raw0)
+raw0$check_date <- as.Date(raw0$check_date)
+raw0$order_date <- as.Date(raw0$order_date)
+raw0$vol <- as.numeric(raw0$vol)
+
+raw1 <- raw0[-which(raw0$check_date<raw0$order_date), ]
+raw1$pre_days <- as.numeric(raw1$check_date - raw1$order_date)
+summary(raw1)
+
+# 仅选取入住日期在2014年数据，计算不同提前天数的比例
+raw2 <- subset(raw1, check_date  < as.Date("2014-02-27") & check_date >= as.Date("2014-01-01"))
+check_sum <- aggregate( vol  ~ check_date, data=raw2, sum)
+names(check_sum)[2] <- "check_sum"
+
+raw3 <- merge(raw2, check_sum, by = "check_date")
+raw3$pre_pct <- raw3$vol/raw3$check_sum
+
+
+# 从图形可以看出不同提前天数的预定比例基本一致
+library(ggplot2)
+ggplot(raw3, aes(x = pre_days, y = vol, color = factor(check_date))) + geom_line()
+ggplot(raw3, aes(x = pre_days, y = pre_pct, color = factor(check_date))) + geom_line()
+
+
+## 计算不同提前天数预定量的预定比例
+pre_pct <- aggregate( pre_pct  ~ pre_days, data=raw3, mean)
+
+## 选取预定日期在2014年的数据进行预测测试
+raw4 <- subset(raw1, order_date >= as.Date("2014-01-01"))
+raw4 <- raw4[order(raw4$order_date), ]
+
+
+
+## 预测后一天的订单量
+pre_pct$rr1 <- c(0, pre_pct[-dim(pre_pct)[1], "pre_pct"]) / pre_pct[, "pre_pct"]
+raw5 <- merge(raw4, pre_pct, by = "pre_days")
+raw5 <- raw5[order(raw5$order_date), ]
+
+raw5$predict_vol <- raw5$vol * raw5$rr1
+
+compare_vol <- aggregate( cbind(vol, predict_vol)  ~ order_date, data=raw5, sum)
+
+write.csv(compare_vol, "compare_vol.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 setwd("N:\\qunar\\Predict")
 raw0 <- read.csv("tt.csv", header = T)
 head(raw0)
