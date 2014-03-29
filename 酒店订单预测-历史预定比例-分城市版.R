@@ -5,23 +5,76 @@ head(raw00)
 raw00$check_date <- as.Date(raw00$check_date)
 raw00$order_date <- as.Date(raw00$order_date)
 raw00$vol <- as.numeric(raw00$vol)
+summary(raw00)
+citylist <- unique(raw00$city_code)
 
-raw0 <- subset(raw00, city_code == "beijing_city" & check_date >= as.Date("2013-03-01"))
-raw1 <- raw0[-which(raw0$check_date<raw0$order_date), ]
-raw1$pre_days <- as.numeric(raw1$check_date - raw1$order_date)
-summary(raw1)
 
-raw1[raw1$pre_days>=15, "pre_days"] <- 15
-raw1$pre_days <- factor(raw1$pre_days)
-summary(raw1)
-raw11 <- aggregate( vol  ~ pre_days + check_date, data=raw1, sum)
+date0 <- "2014-03-25"  # 基础日期
+date1 <- "2014-03-24"  # 预测日期
 
-# 计算不同提前天数的比例
-check_sum <- aggregate( vol  ~ check_date, data=raw11, sum)
-names(check_sum)[2] <- "check_sum"
+for (city_id in 1:length(citylist) ){
+  city_id <- 4
+  city <- citylist[city_id]
+  ## 选择城市数据并汇总提前天数
+  raw0 <- subset(raw00, city_code == city)
+  raw1 <- raw0[-which(raw0$check_date<raw0$order_date), ]
+  raw1$pre_days <- as.numeric(raw1$check_date - raw1$order_date)
+  summary(raw1)
+  raw1[raw1$pre_days>=10, "pre_days"] <- 10  # 将提前天数大于15天的统一标示成15
+  raw11 <- aggregate( vol  ~ pre_days + check_date, data=raw1, sum)
+  
+  # 选择入住日期在最近15天的数据，计算不同提前天数的比例
+  current_date <- as.Date(date0)   # 指定当前日期
+  
+  raw12 <- subset(raw11, check_date >= current_date-28 & check_date <= current_date) # 如包含假期，需特殊处理
+  check_sum <- aggregate( vol  ~ check_date, data=raw12, sum)
+  names(check_sum)[2] <- "check_sum"
+  raw2 <- merge(raw12, check_sum, by = "check_date")
+  raw2$pre_pct <- raw2$vol/raw2$check_sum
+  pre_pct <- aggregate( pre_pct  ~ pre_days , data=raw2, mean)  # 计算不同提前天数预定量的预定比例
+  
+  
+  ## 预测函数, 用三天的平均预测值作为最终预测值
+  
+  pd <- numeric()
+  for (i in 1:5){
+    ct_date <- current_date+1-i
+    predict_date <- as.Date(date1)
+    gap <- as.numeric(predict_date - ct_date)
+    raw13 <- aggregate( vol  ~ pre_days + order_date, data=raw1, sum)
+    current_order <- subset(raw13, order_date == ct_date, select = c(order_date, vol, pre_days))
+    predict_pct <- pre_pct
+    predict_pct$pre_days <- as.numeric(predict_pct$pre_days)
+    predict_pct <- predict_pct[order(-predict_pct$pre_days), ]
+    predict_pct[, "rr"] <- c(predict_pct[-(1:gap), "pre_pct"], rep(0, gap) ) / predict_pct[, "pre_pct"]
+    predict_order <- merge(current_order, predict_pct, by = "pre_days", order = F)
+    predict_order$predict_vol <- predict_order$vol * predict_order$rr
+    pd <- c(pd, sum(predict_order$predict_vol))
+  }
+  
+  actual_vol <- subset(raw13, order_date == predict_date, select = c(order_date, vol, pre_days))
+  pp0 <- sum(actual_vol$vol)
+  pp1 <- format(mean(pd), digits = 1)
+  pperr <- format((mean(pd)/pp0-1)*100, digits = 2)
+  
+  print(paste(city, date1, "的订单量为", pp1, "预测误差", pperr, "%"))
+}
 
-raw2 <- merge(raw11, check_sum, by = "check_date")
-raw2$pre_pct <- raw2$vol/raw2$check_sum
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 导入假期标示
 # holiday <- read.csv("holiday.csv", header = T, stringsAsFactors = F)
@@ -33,8 +86,9 @@ raw2$pre_pct <- raw2$vol/raw2$check_sum
 # summary(raw3)
 raw3 <- raw2
 
-## 计算不同提前天数预定量的预定比例
-pre_pct <- aggregate( pre_pct  ~ pre_days , data=raw3, mean)
+write.csv(raw2, "raw3.csv")
+
+
 
 # 从图形可以看出不同提前天数的预定比例基本一致
 library(ggplot2)
@@ -44,8 +98,8 @@ ggplot(pre_pct, aes(x = pre_days, y = pre_pct)) + geom_line()
 
 ## 预测函数
 
-current_date <- as.Date("2013-03-23")
-predict_date <- as.Date("2013-03-27")
+current_date <- as.Date("2014-03-15")
+predict_date <- as.Date("2014-03-17")
 
 current_order <- subset(raw1, order_date == current_date, select = c(check_date, order_date, vol, pre_days))
 current_order$pre_days <- as.numeric(current_order$pre_days)
@@ -53,7 +107,7 @@ current_order <- current_order[order(current_order$pre_days), ]
 predict_pct <- pre_pct
 predict_pct$pre_days <- as.numeric(predict_pct$pre_days)
 predict_pct <- predict_pct[order(-predict_pct$pre_days), ]
-gap <- as.numeric(predict_date - current_date)-1
+gap <- as.numeric(predict_date - current_date)
 
 
 predict_pct[, "rr"] <- c(predict_pct[-(1:gap), "pre_pct"], rep(0, gap) ) / predict_pct[, "pre_pct"]
