@@ -1,0 +1,477 @@
+% R语言培训
+% 刘兵
+% 2014-04-12
+
+
+
+
+# Part1: R/Rstudio 介绍
+
+
+## What's R?
+
+R（R Development Core Team, 2011）语言由新西兰奥克兰大学的 Ross Ihaka 和 Robert Gentleman 两人共同发明，其词法和语法分别源自 Scheme 和 S 语言，R 语言一般认为是 S 语言（John Chambers, Bell Labs, 1972）的一种方言。R 是“GNU S”， 一个自由的、有效的、用于统计计算和绘图的语言和环境，它提供了广泛的统计分析和绘图技术：包括线性和非线性模型、统计检验、时间序列、分类、聚类等方法。
+
+
+## Why learn R?
+
+- 开源，免费
+- 功能强大, 5000+ packages
+- 灵活简洁，使用不同的操作系统和平台
+- 可视化分析
+- 可重复性研究
+
+
+## What's RStudio?
+
+- 最好用的R编辑器
+- 新手学习利器：强大的帮助功能
+- 版本控制： git 和 SVN
+- 客户端和云端
+- 查错
+
+
+## 学习资源
+
+国外：google, Stack Overflow, Quick-R
+
+国内：统计之都
+
+书籍：《从数据到结论》，《R语言实战》，《R语言编程艺术》，《复杂统计数据分析》，《时间序列分析及应用》
+
+
+## Quick Start
+
+```{r, eval=FALSE}
+# computation
+1 + 2*3 
+# objects
+a <- c(1, 3, 5)
+b <- c("A", "B", "C")
+# Use function
+mean(a)
+sd(a)
+# fuchiton help
+help("mean")
+# more function, install package firstly
+install.package("ggplot2")
+# use package
+library("ggplot2")
+```
+
+
+# Part2: 创建数据
+
+
+## 输入数据
+
+```{r, eval=FALSE}
+test <- data.frame(city=c("A","B","C"), 
+                   x1=c(10,8,13))
+test <- read.table( textConnection(
+"city x1
+A 10
+B 8
+C 13"  
+), header = T) 
+
+```
+
+
+## 如何从外部文件导入数据？
+
+**function**
+- read.table/read.csv
+- readLines
+- scan
+
+**package**
+- foreign: 连接其他类型数据spss/sas/stata
+- RODBC：连接数据库
+- XLConnect：连接excel
+- XML：处理web数据
+
+
+
+## 导入csv/txt数据
+
+```{r, eval=FALSE}
+# 导入csv
+setwd(mydirectory) # set work directory
+# R中指定文件位置需使用'/'或者'\\'
+# 导入txt
+test <- read.csv("test.csv", header = T, sep = ",")
+test <- read.table("test.txt", header = T, sep = "\t")
+test <- readLines("test.txt")
+```
+
+
+## 导入excel数据
+
+```{r, eval=FALSE}
+library(XLConnect)
+wb <- loadWorkbook("test.xlsx", create = T)
+test <- readWorksheet(wb, sheet = "test")
+# 指定读取数据的区域
+test2 <- readWorksheet(wb, sheet = "test", 
+                       startRow = 1, startCol = 1, 
+                       endRow = 5, endCol = 4)
+```
+
+
+## 导入SAS/Stata/SPSS数据
+
+```{r, eval=FALSE}
+library(foreign)
+statadata <- read.dta("statafile.dta")
+spssdata <- read.spss("spssfile.sav")
+sasdata <- read.xport("sasfile.xpt")
+```
+
+
+## 如何将数据导出成其他格式？
+
+**function** - write.table/write.csv
+
+**package** - RODBC/XLConnect/XML
+
+
+## 导出csv/txt/excel
+```{r, eval=FALSE}
+# 导出csv格式
+write.csv(test, file = "test.csv")
+# 导出txt格式， `quote = F`去掉引号
+write.table(test, file = "test.txt", quote = F) 
+# 导出excel
+library(XLConnect)
+wb <- loadWorkbook("writeWorksheet.xlsx", create = TRUE)
+createSheet(wb, name = "test")
+writeWorksheet(wb, CO2, sheet = "test")
+saveWorkbook(wb)
+```
+
+
+# Part3：整理数据
+
+
+## 预览查看数据
+
+```{r, eval=FALSE}
+fix()
+head()
+tail()
+summary()
+str()
+```
+
+
+## 数据类型及相互转换
+
+vector: c()
+array: array()
+matrix: matrix(), as.matrix()
+dataframe: data.frame(), as.data.frame()
+list: list(), unlist()
+
+as.charactor()
+as.numeric()
+as.factor()
+
+
+## 修改数据
+
+```{r, eval=FALSE}
+# 删除记录
+dataA[-3, ]
+
+# delete "x1" in column 2 and "y1" in column 6
+mydataB <- mydataA[ - c(2, 6)]
+mydataB <- mydataA[ ! (names(mydataA) %in% c("x1", "y1") ) ]
+
+
+# 修改取值
+dataA[3, 5] <- 
+```
+
+
+
+## 筛选数据-选择变量
+
+选择变量有多种方式：变量位置，变量名，逻辑判和`subset()`函数
+
+variable name of data: city, x1, x2, x3, x4, y1, y2, y3, y4
+
+```{r, eval=FALSE}
+# select variables: city, x1, x2, y3, y4
+# by index
+mydataB <- mydataA[c(1, 2, 3, 8, 9)]
+mydataB <- mydataA[, c(1, 2, 3, 8, 9)]
+# by name
+mydataB <- mydataA[c("city", "x1", "x2", "y3", "y4")]
+# by logical
+mydataB <- mydataA[c(TRUE, TRUE, TRUE, FALSE, 
+                     FALSE, FALSE, FALSE, TRUE, TRUE)]
+mydataB <- mydataA[as.logical(c(1,1,1,0,0,0,0,1,1))]
+```
+
+
+## 筛选数据-选择变量
+
+根据变量名进行选择
+
+```{r, eval=FALSE}
+# 保留一个变量
+mydataB <- mydataA[names(mydataA) == "city"]
+# 保留多个变量
+mydataB <- mydataA[names(mydataA) %in% 
+                     c("city", "x1", "x2", "y3", "y4")]
+# 避免写逗号
+mydataB <- mydataA[unlist(strsplit("city x1 x2 y3 y4", 
+                                   split = " "))]
+# 保留y2-y4
+mydataB <- mydataA[c("city", paste("y", 2:4, sep = ""))]
+# 保留以x开头的变量
+mydataB <- mydataA[grep("city|^x", names(mydataA))] 
+# Note: this regular expression will also keep the var like xA,xB
+```
+
+
+## 筛选数据-选择变量
+
+使用`subset()`函数选择变量
+
+Usage: `subset(x, subset, select, drop = FALSE, ...)`
+
+```{r, eval=FALSE}
+mydataB <- subset(mydataA, select = city )
+mydataB <- subset(mydataA, select = c(city, x1, x2, y3, y4) )
+mydataB <- subset(mydataA, select = c(city, y2:y4) )
+
+# 选择以x开头的变量
+mydataB <- subset(mydataA, 
+                  select = grep("city|^x", names(mydataA))) 
+```
+
+
+## 筛选数据-选择变量
+
+一些有用的技巧
+
+```{r, eval=FALSE}
+# 选择第一个变量和最后一个变量
+first_var <- mydataA[1] 
+last_var <- mydataA[ncol(mydataA)]
+
+# 所有数值变量或所有字符变量
+mydataB <- mydataA[ apply(gg, 2, is.numeric) ]
+mydataB <- mydataA[ apply(gg, 2, is.character) ]
+
+# R的优势在于能通过位置选取数据
+mydataB <- mydataA[c(1, 3, 5:20, 77, 90:100)]
+mydataB <- subset(mydataA, 
+                  select = c(1, 3, 5:20, 77, 90:100) )
+```
+
+
+## 筛选数据-选择记录
+
+可以使用与选择变量类似的方式选择记录。如筛选条件包含字符型变量，善用正则表达式。
+
+```{r, eval=FALSE}
+mydataC <- subset(mydataA, city %in% c("B", "C") )
+mydataC <- subset(mydataA, (city=="B" | x1>10) )
+# 正则表达式
+mydataC <- subset(mydataA, grepl("^C", city) )
+```
+
+
+
+## 排序
+
+R不直接对数据进行排序，而是返回数据记录的大小位置，重新排列数据
+
+```{r, eval=FALSE}
+order(mydataA$cyl, mydataA$mpg)
+mydataB <- mydataA[ order(mydataA$cyl, mydataA$hp), ]
+# add "-" to get the decending order
+mydataB <- mydataA[ order(mydataA$cyl, - mydataA$hp), ]
+# unique records
+mydataB <- mydataA[ ! duplicated(mydataA[, c("cyl", "hp")]), ]
+```
+
+
+## 合并数据 - 横向合并
+
+a function of R has the same name 'merge'  
+
+```{r, eval=FALSE}
+merge(x, y, by = intersect(names(x), names(y)),
+      by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all,
+      sort = TRUE, suffixes = c(".x",".y"),
+      incomparables = NULL, ...)
+# 全集合并
+data_all <- merge(dataA, dataB, by= c("provience", "city"), all=T)
+# 合并所依据的变量名不一样 
+data_all <- merge(dataA, dataB, 
+                  by.x= c("provience","city"), 
+                  by.y= c("prov","ct"),all=T)
+# 向左合并
+data_all <- merge(dataA, dataB, by= c("provience", "city"), all.x=T)
+# 向右合并
+data_all <- merge(dataA, dataB, by= c("provience", "city"), all.y=T)
+```
+
+
+
+## 合并数据 - 纵向合并
+
+`rbind()`函数能附加新的数据，要保证两份数据的变量相同 
+
+```{r, eval=FALSE}
+# R
+mydata_append <- rbind(mydataA, mydataB)
+```
+
+
+## 整合数据
+
+
+```{r}
+df3 <- data.frame(school = rep(1:3, each = 4), 
+                  class = rep(9:10, 6),
+                  time = rep(c(1,1,2,2), 3), 
+                  score = rnorm(12))
+reshape(df3, idvar = c("school","class"),direction = "wide")
+```
+
+
+## 整合数据 - reshape2
+
+reshape2 is a flexible package in R for reshaping data
+
+```{r, eval=FALSE}
+library(reshape2)
+data_w <- airquality[1:20, ]
+names(data_w) <- tolower(names(data_w))
+
+# reshape by variable, wide to long
+data_l <- melt(data_w, id.vars=c("month", "day"))
+
+# back to wide format
+data_w2 <- dcast(data=data_l, month + day ~ variable)
+```
+
+
+
+# Part4: 数据汇总
+
+
+## 频数表和列联表
+
+```{r, eval=FALSE}
+# 一维的频数表
+freq_CW <- table(chickweight[, c("diet")])
+Prop_CW <- prop.table(freq_CW)
+
+# 列联表
+freq2_CW <- table(chickweight[, c("diet", "time")])
+freq2_CW <- xtabs( ~ diet + time, chickweight) )
+```
+
+
+## 数据的描述性分析
+
+对数据进行描述性分析 
+
+```{r, eval=FALSE}
+# 单个变量
+mean(chickweight$weight)
+std(chickweight$weight)
+max(chickweight$weight)
+min(chickweight$weight)
+length(chickweight$weight)
+# 多个变量
+sapply(chickweight[c("weight", "time")], mean)
+# 对整个数据的描述性分析
+summary(chickweight[c("weight", "time")])
+```
+
+
+## 数据的描述性分析 - 分类汇总
+
+  
+
+```{r, eval=FALSE}
+# 单个描述变量 ~ 单个分类变量
+tapply(chickweight$weight, chickweight$diet, mean)
+# 单个描述变量 ~ 多个分类变量
+aggregate(chickweight[c("weight", "time")], by=list(diet=chickweight$diet), mean)
+
+# 多个描述变量 ~ 多个分类变量，单个指标
+aggregate( weight ~ diet, data = chickweight, mean)
+aggregate( weight ~ diet + time, data = chickweight, sum)
+aggregate( cbind(weight, chick) ~ diet, data = chickweight, mean)
+aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, sd)
+
+# 多个描述变量 ~ 多个分类变量，多个指标
+ind_stat <- function(x) (c (m= mean(x), s=sum(x)))
+aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, ind_stat)
+
+```
+
+
+## 数据的描述性分析 - 利用reshape2
+
+useful package `reshape2` 
+
+```{r, eval=FALSE}
+library(reshape2)
+chick_m <- melt(chickweight, id=2:4, na.rm=TRUE)
+dcast(chick_m, time ~ variable, mean) # average effect of time
+dcast(chick_m, diet ~ variable, mean) # average effect of diet
+dcast(chick_m, diet + time ~ variable, mean)  # average effect of diet & time
+acast(chick_m, diet ~ time, mean) # average effect of diet & time
+
+# more indicators in one output
+ind_stat <- function(x) (c (m= mean(x), s=sum(x)))
+chick_m <- melt(chickweight, id=c("time", "diet"), measure.vars=c("weight", "chick"))
+chick_m$value <- as.numeric(chick_m$value)
+cast(chick_m, diet + time + variable ~ ., ind_stat)
+```
+
+
+## 线性回归
+
+
+```{r}
+# R
+M1 <- lm( weight ~ time + diet, data = chickweight)
+summary(M1)
+```
+
+
+
+# Part5: 可视化数据
+
+
+
+## Graph - Data Visulation
+
+Data visulation is very important for data analysis to explore the pattern which may can not be found through modeling. There are a lot of graphs to show data
+
+- Base graph: scatter, barplot, pie, line, barplot, boxplot
+- intermediate graph: scatter matrix, bubble plot, correlation matrix, muti-line chart
+- advanced graph: network, path diagarm, map, graph layer
+
+Modify the elements/option/parameter of the plot can get beautiful graphs, these character are following:
+
+dot, line, color, size, shape, alpha(diaphaneity), layer, data transformation...
+
+
+## Part6: 输出报告
+
+
+
+
+
+
