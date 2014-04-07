@@ -2,9 +2,14 @@
 % 刘兵
 % 2014-04-12
 
-
-
-
+```{r setup, echo=FALSE}
+options(width = 100,digits=3)
+opts_chunk$set(message = FALSE, eval=TRUE, fig.align = "center", 
+               warning = FALSE, comment = NA, 
+               fig.width=8, fig.height=6,
+               tidy = T, cache = T)
+options(xtable.type = 'html')
+```
 # Part1: R/Rstudio 介绍
 
 
@@ -21,7 +26,6 @@ R（R Development Core Team, 2011）语言由新西兰奥克兰大学的 Ross Ihaka 和 Robert 
 - 可视化分析
 - 可重复性研究
 
-
 ## What's RStudio?
 
 - 最好用的R编辑器
@@ -30,7 +34,6 @@ R（R Development Core Team, 2011）语言由新西兰奥克兰大学的 Ross Ihaka 和 Robert 
 - 客户端和云端
 - 查错
 
-
 ## 学习资源
 
 国外：google, Stack Overflow, Quick-R
@@ -38,7 +41,6 @@ R（R Development Core Team, 2011）语言由新西兰奥克兰大学的 Ross Ihaka 和 Robert 
 国内：统计之都
 
 书籍：《从数据到结论》，《R语言实战》，《R语言编程艺术》，《复杂统计数据分析》，《时间序列分析及应用》
-
 
 ## Quick Start
 
@@ -61,7 +63,6 @@ library("ggplot2")
 
 
 # Part2: 创建数据
-
 
 ## 输入数据
 
@@ -154,7 +155,7 @@ saveWorkbook(wb)
 # Part3：整理数据
 
 
-## 预览查看数据
+### 预览查看数据
 
 ```{r, eval=FALSE}
 fix()
@@ -165,7 +166,7 @@ str()
 ```
 
 
-## 数据类型及相互转换
+### 数据类型及相互转换
 
 vector: c()
 array: array()
@@ -178,7 +179,7 @@ as.numeric()
 as.factor()
 
 
-## 修改数据
+### 修改数据
 
 ```{r, eval=FALSE}
 # 删除记录
@@ -195,7 +196,7 @@ dataA[3, 5] <-
 
 
 
-## 筛选数据-选择变量
+### 筛选数据-选择变量
 
 选择变量有多种方式：变量位置，变量名，逻辑判和`subset()`函数
 
@@ -215,7 +216,7 @@ mydataB <- mydataA[as.logical(c(1,1,1,0,0,0,0,1,1))]
 ```
 
 
-## 筛选数据-选择变量
+### 筛选数据-选择变量
 
 根据变量名进行选择
 
@@ -236,7 +237,7 @@ mydataB <- mydataA[grep("city|^x", names(mydataA))]
 ```
 
 
-## 筛选数据-选择变量
+### 筛选数据-选择变量
 
 使用`subset()`函数选择变量
 
@@ -253,7 +254,7 @@ mydataB <- subset(mydataA,
 ```
 
 
-## 筛选数据-选择变量
+### 筛选数据-选择变量
 
 一些有用的技巧
 
@@ -273,7 +274,7 @@ mydataB <- subset(mydataA,
 ```
 
 
-## 筛选数据-选择记录
+### 筛选数据-选择记录
 
 可以使用与选择变量类似的方式选择记录。如筛选条件包含字符型变量，善用正则表达式。
 
@@ -286,7 +287,7 @@ mydataC <- subset(mydataA, grepl("^C", city) )
 
 
 
-## 排序
+### 排序
 
 R不直接对数据进行排序，而是返回数据记录的大小位置，重新排列数据
 
@@ -300,7 +301,7 @@ mydataB <- mydataA[ ! duplicated(mydataA[, c("cyl", "hp")]), ]
 ```
 
 
-## 合并数据 - 横向合并
+### 合并数据 - 横向合并
 
 a function of R has the same name 'merge'  
 
@@ -323,7 +324,7 @@ data_all <- merge(dataA, dataB, by= c("provience", "city"), all.y=T)
 
 
 
-## 合并数据 - 纵向合并
+### 合并数据 - 纵向合并
 
 `rbind()`函数能附加新的数据，要保证两份数据的变量相同 
 
@@ -333,7 +334,7 @@ mydata_append <- rbind(mydataA, mydataB)
 ```
 
 
-## 整合数据
+### 整合数据
 
 
 ```{r}
@@ -345,7 +346,7 @@ reshape(df3, idvar = c("school","class"),direction = "wide")
 ```
 
 
-## 整合数据 - reshape2
+### 整合数据 - reshape2
 
 reshape2 is a flexible package in R for reshaping data
 
@@ -366,7 +367,7 @@ data_w2 <- dcast(data=data_l, month + day ~ variable)
 # Part4: 数据汇总
 
 
-## 频数表和列联表
+### 频数表和列联表
 
 ```{r, eval=FALSE}
 # 一维的频数表
@@ -379,7 +380,7 @@ freq2_CW <- xtabs( ~ diet + time, chickweight) )
 ```
 
 
-## 数据的描述性分析
+### 数据的描述性分析
 
 对数据进行描述性分析 
 
@@ -397,7 +398,7 @@ summary(chickweight[c("weight", "time")])
 ```
 
 
-## 数据的描述性分析 - 分类汇总
+### 数据的描述性分析 - 分类汇总
 
   
 
@@ -420,7 +421,7 @@ aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, ind_stat)
 ```
 
 
-## 数据的描述性分析 - 利用reshape2
+### 数据的描述性分析 - 利用reshape2
 
 useful package `reshape2` 
 
@@ -440,7 +441,7 @@ cast(chick_m, diet + time + variable ~ ., ind_stat)
 ```
 
 
-## 线性回归
+### 线性回归
 
 
 ```{r}
@@ -451,26 +452,80 @@ summary(M1)
 
 
 
-# Part5: 可视化数据
+# Part5: 可视化数据 - ggplot2
 
 
+### 耗油量数据 - Data Visulation
 
-## Graph - Data Visulation
+```{r, results='asis'}
+library(ggplot2)
+head(mpg)
+```
 
-Data visulation is very important for data analysis to explore the pattern which may can not be found through modeling. There are a lot of graphs to show data
+### Quick Start - ggplot2
 
-- Base graph: scatter, barplot, pie, line, barplot, boxplot
-- intermediate graph: scatter matrix, bubble plot, correlation matrix, muti-line chart
-- advanced graph: network, path diagarm, map, graph layer
+```{r}
+library(ggplot2)
+## 用不同的颜色标注变气缸数
+qplot(displ, hwy, data = mpg, color = factor(cyl))
 
-Modify the elements/option/parameter of the plot can get beautiful graphs, these character are following:
+## 用不同的形状标注变气缸数
+qplot(displ, hwy, data = mpg, shape = factor(cyl))
 
-dot, line, color, size, shape, alpha(diaphaneity), layer, data transformation...
+## 添加线性回归拟合曲线
+p = qplot(displ, hwy, data = mpg, color = factor(cyl))
+p + geom_smooth(method="lm") # smoothing line
+```
 
 
-## Part6: 输出报告
+### 基本图形 - ggplot2
+
+```{r, eval=FALSE}
+library(ggplot2)
+## 散点图
+qplot(displ, hwy, data = mpg)
+
+## 箱型图
+qplot(class, hwy, data = mpg, geom = "boxplot")
+
+## 柱形图 
+qplot(hwy, data = mpg, geom = "bar")
+
+## 直方图和密度曲线图
+qplot(hwy, data = mpg, geom = c("histogram"))
+qplot(hwy, data = mpg, geom = c("density"), color = factor(year))
+```
+
+### 中级图形 - ggplot2
+
+```{r, eval=FALSE}
+library(ggplot2)
+
+## 参数设置和图形叠加
+p <- ggplot(mpg, aes(class,hwy)) 
+p + geom_boxplot(aes(fill=class),alpha=0.5)+  
+    geom_point(position='jitter',color='grey30')+
+    theme(legend.position='none') 
 
 
+## 分面
+p  <- ggplot(mpg,aes(x=hwy)) 
+p + geom_histogram(aes(fill=factor(year), y=..density..), 
+                   alpha=0.5, color = "black") + 
+    stat_density(geom='line', position='identity',size=1, 
+               aes(colour=factor(year)),alpha=0.8) + 
+    facet_wrap(~year,ncol=1)
+
+```
+
+
+# Part6: 输出报告
+
+------
+![knitr](figure/knitr.png)
+
+
+### 文字和代码混编
 
 
 

@@ -1,0 +1,1 @@
+将knitr产生的md文件另存为utf-8格式，运行pandoc即能得到中文slides
