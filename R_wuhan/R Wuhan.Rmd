@@ -10,7 +10,7 @@ opts_chunk$set(message = FALSE, eval=TRUE, fig.align = "center",
                tidy = T, cache = T)
 options(xtable.type = 'html')
 ```
-# Part1: R/Rstudio 介绍
+# Part1: Introduction of R
 
 
 ## What's R?
@@ -82,15 +82,15 @@ C 13"
 ## 如何从外部文件导入数据？
 
 **function**
-- read.table/read.csv
-- readLines
-- scan
+    - read.table/read.csv
+    - readLines
+    - scan
 
 **package**
-- foreign: 连接其他类型数据spss/sas/stata
-- RODBC：连接数据库
-- XLConnect：连接excel
-- XML：处理web数据
+    - foreign: 连接其他类型数据spss/sas/stata
+    - RODBC：连接数据库
+    - XLConnect：连接excel
+    - XML：处理web数据
 
 
 
@@ -158,16 +158,17 @@ saveWorkbook(wb)
 ### 预览查看数据
 
 ```{r, eval=FALSE}
-fix()
-head()
-tail()
-summary()
-str()
+fix(iris)
+head(iris)
+tail(iris)
+summary(iris)
+str(iris)
 ```
 
 
 ### 数据类型及相互转换
 
+```{r, eval=FALSE}
 vector: c()
 array: array()
 matrix: matrix(), as.matrix()
@@ -177,21 +178,24 @@ list: list(), unlist()
 as.charactor()
 as.numeric()
 as.factor()
-
+```
 
 ### 修改数据
 
 ```{r, eval=FALSE}
+mydataA <- iris
+# 重命名
+names(mydataA) <- tolower(names(mydataA))
+
 # 删除记录
 dataA[-3, ]
 
-# delete "x1" in column 2 and "y1" in column 6
-mydataB <- mydataA[ - c(2, 6)]
-mydataB <- mydataA[ ! (names(mydataA) %in% c("x1", "y1") ) ]
-
+# 删除变量"sepal.width"和"petal.width"
+mydataB <- mydataA[ - c(2, 4)]
+mydataB <- mydataA[ ! (names(mydataA) %in% c("sepal.width", "petal.width") ) ]
 
 # 修改取值
-dataA[3, 5] <- 
+mydataB[3, 2] <- 0.5
 ```
 
 
@@ -200,77 +204,57 @@ dataA[3, 5] <-
 
 选择变量有多种方式：变量位置，变量名，逻辑判和`subset()`函数
 
-variable name of data: city, x1, x2, x3, x4, y1, y2, y3, y4
+"sepal.length" "sepal.width"  "petal.length" "petal.width"  "species"
 
 ```{r, eval=FALSE}
-# select variables: city, x1, x2, y3, y4
 # by index
-mydataB <- mydataA[c(1, 2, 3, 8, 9)]
-mydataB <- mydataA[, c(1, 2, 3, 8, 9)]
+mydataB <- mydataA[c(1, 3, 5)]
+mydataB <- mydataA[, c(1, 3, 5)]
 # by name
-mydataB <- mydataA[c("city", "x1", "x2", "y3", "y4")]
+mydataB <- mydataA[c("sepal.length", "sepal.length", "species")]
 # by logical
-mydataB <- mydataA[c(TRUE, TRUE, TRUE, FALSE, 
-                     FALSE, FALSE, FALSE, TRUE, TRUE)]
-mydataB <- mydataA[as.logical(c(1,1,1,0,0,0,0,1,1))]
+mydataB <- mydataA[c(TRUE, FALSE, TRUE, FALSE, TRUE)]
+mydataB <- mydataA[as.logical(c(1,0,1,0,1))]
 ```
 
 
-### 筛选数据-选择变量
-
-根据变量名进行选择
+### 根据变量名进行选择
 
 ```{r, eval=FALSE}
 # 保留一个变量
-mydataB <- mydataA[names(mydataA) == "city"]
+mydataB <- mydataA[names(mydataA) == "species"]
 # 保留多个变量
 mydataB <- mydataA[names(mydataA) %in% 
-                     c("city", "x1", "x2", "y3", "y4")]
+                     c("species", "sepal.length", "sepal.width")]
 # 避免写逗号
-mydataB <- mydataA[unlist(strsplit("city x1 x2 y3 y4", 
-                                   split = " "))]
-# 保留y2-y4
-mydataB <- mydataA[c("city", paste("y", 2:4, sep = ""))]
-# 保留以x开头的变量
-mydataB <- mydataA[grep("city|^x", names(mydataA))] 
-# Note: this regular expression will also keep the var like xA,xB
+unlist(strsplit("city x1 x2 y3 y4", split = " "))
+
+# 保留种类species和花萼的相关变量(sepal开头的)
+# 正则表达式
+mydataB <- mydataA[grep("species|^sepal", names(mydataA))] 
 ```
 
 
-### 筛选数据-选择变量
-
-使用`subset()`函数选择变量
-
-Usage: `subset(x, subset, select, drop = FALSE, ...)`
+### 使用`subset()`函数选择变量
 
 ```{r, eval=FALSE}
-mydataB <- subset(mydataA, select = city )
-mydataB <- subset(mydataA, select = c(city, x1, x2, y3, y4) )
-mydataB <- subset(mydataA, select = c(city, y2:y4) )
+subset(x, subset, select, drop = FALSE, ...)
+
+mydataB <- subset(mydataA, select = species )
+mydataB <- subset(mydataA, select = c(species, sepal.length, sepal.width) )
 
 # 选择以x开头的变量
 mydataB <- subset(mydataA, 
-                  select = grep("city|^x", names(mydataA))) 
+                  select = grep("species|^sepal", names(mydataA))) 
 ```
 
 
-### 筛选数据-选择变量
-
-一些有用的技巧
+### 一些有用的筛选技巧
 
 ```{r, eval=FALSE}
 # 选择第一个变量和最后一个变量
 first_var <- mydataA[1] 
 last_var <- mydataA[ncol(mydataA)]
-
-# 所有数值变量或所有字符变量
-mydataB <- mydataA[ apply(gg, 2, is.numeric) ]
-mydataB <- mydataA[ apply(gg, 2, is.character) ]
-
-# R的优势在于能通过位置选取数据
-mydataB <- mydataA[c(1, 3, 5:20, 77, 90:100)]
-mydataB <- subset(mydataA, 
-                  select = c(1, 3, 5:20, 77, 90:100) )
 ```
 
 
@@ -279,43 +263,66 @@ mydataB <- subset(mydataA,
 可以使用与选择变量类似的方式选择记录。如筛选条件包含字符型变量，善用正则表达式。
 
 ```{r, eval=FALSE}
-mydataC <- subset(mydataA, city %in% c("B", "C") )
-mydataC <- subset(mydataA, (city=="B" | x1>10) )
+mydataC <- subset(mydataA, species %in% c("setosa", "versicolor") )
+# 多重条件，并"&", 或"|"
+mydataC <- subset(mydataA, (species=="setosa" & sepal.length>5) )
+
 # 正则表达式
-mydataC <- subset(mydataA, grepl("^C", city) )
+mydataC <- subset(mydataA, grepl("^v", species) )
+
+# R的优势在于能通过位置选取数据
+mydataB <- mydataA[c(1, 3, 5:20), ]
 ```
+
 
 
 
 ### 排序
 
-R不直接对数据进行排序，而是返回数据记录的大小位置，重新排列数据
+R不直接对数据进行排序，而是返回排序后的数据记录号，根据记录号排列数据
 
 ```{r, eval=FALSE}
-order(mydataA$cyl, mydataA$mpg)
-mydataB <- mydataA[ order(mydataA$cyl, mydataA$hp), ]
-# add "-" to get the decending order
-mydataB <- mydataA[ order(mydataA$cyl, - mydataA$hp), ]
-# unique records
+# 返回数据记录号
+order(mydataA$sepal.length, mydataA$petal.length)
+mydataB <- mydataA[ order(mydataA$sepal.length, mydataA$petal.length), ]
+
+# 加负号 "-" 表示按降序排列
+mydataB <- mydataA[ order(-mydataA$sepal.length, -mydataA$petal.length), ]
+
+# 去除重复值
 mydataB <- mydataA[ ! duplicated(mydataA[, c("cyl", "hp")]), ]
 ```
 
 
-### 合并数据 - 横向合并
+### 横向合并数据 - `merge`
 
-a function of R has the same name 'merge'  
 
 ```{r, eval=FALSE}
-merge(x, y, by = intersect(names(x), names(y)),
-      by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all,
-      sort = TRUE, suffixes = c(".x",".y"),
-      incomparables = NULL, ...)
+dataA <- data.frame(
+    provience = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "beijing")),
+    city = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "beijing"),
+    population = seq(100, 600, 100))
+dataB <- data.frame(
+    provience = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong")),
+    city = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "guangzhou"),
+    gdp = seq(30, 80, 10))
+dataC <- data.frame(
+    prov = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong")),
+    ct = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "guangzhou"),
+    gdp = seq(30, 80, 10))
+```
+
+### 横向合并数据 - `merge`
+
+```{r, eval=FALSE}
 # 全集合并
 data_all <- merge(dataA, dataB, by= c("provience", "city"), all=T)
+
 # 合并所依据的变量名不一样 
-data_all <- merge(dataA, dataB, 
+data_all <- merge(dataA, dataC, 
                   by.x= c("provience","city"), 
                   by.y= c("prov","ct"),all=T)
+
 # 向左合并
 data_all <- merge(dataA, dataB, by= c("provience", "city"), all.x=T)
 # 向右合并
@@ -323,19 +330,15 @@ data_all <- merge(dataA, dataB, by= c("provience", "city"), all.y=T)
 ```
 
 
+### 纵向合并数据 - `rbind`
 
-### 合并数据 - 纵向合并
-
-`rbind()`函数能附加新的数据，要保证两份数据的变量相同 
+要保证两份数据的变量相同 
 
 ```{r, eval=FALSE}
-# R
 mydata_append <- rbind(mydataA, mydataB)
 ```
 
-
 ### 整合数据
-
 
 ```{r}
 df3 <- data.frame(school = rep(1:3, each = 4), 
@@ -347,8 +350,6 @@ reshape(df3, idvar = c("school","class"),direction = "wide")
 
 
 ### 整合数据 - reshape2
-
-reshape2 is a flexible package in R for reshaping data
 
 ```{r, eval=FALSE}
 library(reshape2)
@@ -366,6 +367,17 @@ data_w2 <- dcast(data=data_l, month + day ~ variable)
 
 # Part4: 数据汇总
 
+### 数据
+ 
+`ChickWeight`,  weight versus age of chicks on different diets
+
+```{r, results='asis'}
+library(knitr)
+chickweight <- ChickWeight
+names(chickweight) <- tolower(names(chickweight))
+kable(head(chickweight), format = "html")
+```
+
 
 ### 频数表和列联表
 
@@ -382,8 +394,6 @@ freq2_CW <- xtabs( ~ diet + time, chickweight) )
 
 ### 数据的描述性分析
 
-对数据进行描述性分析 
-
 ```{r, eval=FALSE}
 # 单个变量
 mean(chickweight$weight)
@@ -398,10 +408,8 @@ summary(chickweight[c("weight", "time")])
 ```
 
 
-### 数据的描述性分析 - 分类汇总
-
+### 分类汇总
   
-
 ```{r, eval=FALSE}
 # 单个描述变量 ~ 单个分类变量
 tapply(chickweight$weight, chickweight$diet, mean)
@@ -423,8 +431,6 @@ aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, ind_stat)
 
 ### 数据的描述性分析 - 利用reshape2
 
-useful package `reshape2` 
-
 ```{r, eval=FALSE}
 library(reshape2)
 chick_m <- melt(chickweight, id=2:4, na.rm=TRUE)
@@ -443,7 +449,6 @@ cast(chick_m, diet + time + variable ~ ., ind_stat)
 
 ### 线性回归
 
-
 ```{r}
 # R
 M1 <- lm( weight ~ time + diet, data = chickweight)
@@ -455,11 +460,11 @@ summary(M1)
 # Part5: 可视化数据 - ggplot2
 
 
-### 耗油量数据 - Data Visulation
+### 耗油量数据
 
 ```{r, results='asis'}
-library(ggplot2)
-head(mpg)
+library(ggplot2);library(knitr)
+kable(head(mpg), format = "html")
 ```
 
 ### Quick Start - ggplot2
