@@ -1,0 +1,27 @@
+knitr例子
+========================================================
+
+This is an R Markdown document. **Markdown** is a simple *formatting* syntax for authoring web pages.
+
+## part1 
+### 1.1 What's RStudio?
+
+- 最好用的R编辑器
+- 新手学习利器：~~强大的帮助功能~~完善的帮助功能
+ 
+### 1.2 学习资源
+
+* 国外：[google](https://www.google.com.hk), Stack Overflow, Quick-R
+* 书籍：
+    + 入门：《从数据到结论》 《R语言实战》
+    + 提高：《R语言编程艺术》 《复杂统计数据分析》
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+```{r fig.width=7, fig.height=6}
+plot(cars)
+```
+

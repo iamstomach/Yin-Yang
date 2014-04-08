@@ -1,5 +1,5 @@
-% RÓïÑÔÅàÑµ
-% Áõ±ø
+% Rè¯­è¨€åŸ¹è®­
+% åˆ˜å…µ
 % 2014-04-12
 
 ```{r setup, echo=FALSE}
@@ -10,39 +10,43 @@ opts_chunk$set(message = FALSE, eval=TRUE, fig.align = "center",
                tidy = T, cache = T)
 options(xtable.type = 'html')
 ```
-# Part1: Introduction of R
+# Part1: Rä»‹ç»
 
+## 
+### What's R?
 
-## What's R?
+Rï¼ˆR Development Core Team, 2011ï¼‰è¯­è¨€ç”±æ–°è¥¿å…°å¥¥å…‹å…°å¤§å­¦çš„ Ross Ihaka å’Œ Robert Gentleman ä¸¤äººå…±åŒå‘æ˜Žï¼Œå…¶è¯æ³•å’Œè¯­æ³•åˆ†åˆ«æºè‡ª Scheme å’Œ S è¯­è¨€ï¼ŒR è¯­è¨€ä¸€èˆ¬è®¤ä¸ºæ˜¯ S è¯­è¨€ï¼ˆJohn Chambers, Bell Labs, 1972ï¼‰çš„ä¸€ç§æ–¹è¨€ã€‚R æ˜¯â€œGNU Sâ€ï¼Œ ä¸€ä¸ªè‡ªç”±çš„ã€æœ‰æ•ˆçš„ã€ç”¨äºŽç»Ÿè®¡è®¡ç®—å’Œç»˜å›¾çš„è¯­è¨€å’ŒçŽ¯å¢ƒï¼Œå®ƒæä¾›äº†å¹¿æ³›çš„ç»Ÿè®¡åˆ†æžå’Œç»˜å›¾æŠ€æœ¯ï¼šåŒ…æ‹¬çº¿æ€§å’Œéžçº¿æ€§æ¨¡åž‹ã€ç»Ÿè®¡æ£€éªŒã€æ—¶é—´åºåˆ—ã€åˆ†ç±»ã€èšç±»ç­‰æ–¹æ³•ã€‚
 
-R£¨R Development Core Team, 2011£©ÓïÑÔÓÉÐÂÎ÷À¼°Â¿ËÀ¼´óÑ§µÄ Ross Ihaka ºÍ Robert Gentleman Á½ÈË¹²Í¬·¢Ã÷£¬Æä´Ê·¨ºÍÓï·¨·Ö±ðÔ´×Ô Scheme ºÍ S ÓïÑÔ£¬R ÓïÑÔÒ»°ãÈÏÎªÊÇ S ÓïÑÔ£¨John Chambers, Bell Labs, 1972£©µÄÒ»ÖÖ·½ÑÔ¡£R ÊÇ¡°GNU S¡±£¬ Ò»¸ö×ÔÓÉµÄ¡¢ÓÐÐ§µÄ¡¢ÓÃÓÚÍ³¼Æ¼ÆËãºÍ»æÍ¼µÄÓïÑÔºÍ»·¾³£¬ËüÌá¹©ÁË¹ã·ºµÄÍ³¼Æ·ÖÎöºÍ»æÍ¼¼¼Êõ£º°üÀ¨ÏßÐÔºÍ·ÇÏßÐÔÄ£ÐÍ¡¢Í³¼Æ¼ìÑé¡¢Ê±¼äÐòÁÐ¡¢·ÖÀà¡¢¾ÛÀàµÈ·½·¨¡£
+## 
+### Why learn R?
 
+- å¼€æºï¼Œå…è´¹
+- åŠŸèƒ½å¼ºå¤§, 5000+ packages
+- çµæ´»ç®€æ´ï¼Œä½¿ç”¨ä¸åŒçš„æ“ä½œç³»ç»Ÿå’Œå¹³å°
+- å¯è§†åŒ–åˆ†æž
+- å¯é‡å¤æ€§ç ”ç©¶
 
-## Why learn R?
+## 
+### What's RStudio?
 
-- ¿ªÔ´£¬Ãâ·Ñ
-- ¹¦ÄÜÇ¿´ó, 5000+ packages
-- Áé»î¼ò½à£¬Ê¹ÓÃ²»Í¬µÄ²Ù×÷ÏµÍ³ºÍÆ½Ì¨
-- ¿ÉÊÓ»¯·ÖÎö
-- ¿ÉÖØ¸´ÐÔÑÐ¾¿
+- æœ€å¥½ç”¨çš„Rç¼–è¾‘å™¨
+- æ–°æ‰‹å­¦ä¹ åˆ©å™¨ï¼šå¼ºå¤§çš„å¸®åŠ©åŠŸèƒ½
+- ç‰ˆæœ¬æŽ§åˆ¶ï¼š git å’Œ SVN
+- å®¢æˆ·ç«¯å’Œäº‘ç«¯
+- æŸ¥é”™
 
-## What's RStudio?
+## 
+### å­¦ä¹ èµ„æº
 
-- ×îºÃÓÃµÄR±à¼­Æ÷
-- ÐÂÊÖÑ§Ï°ÀûÆ÷£ºÇ¿´óµÄ°ïÖú¹¦ÄÜ
-- °æ±¾¿ØÖÆ£º git ºÍ SVN
-- ¿Í»§¶ËºÍÔÆ¶Ë
-- ²é´í
+* å›½å¤–ï¼šgoogle, Stack Overflow, Quick-R
+* å›½å†…ï¼šç»Ÿè®¡ä¹‹éƒ½
+* ä¹¦ç±ï¼š
+    + å…¥é—¨ï¼šã€Šä»Žæ•°æ®åˆ°ç»“è®ºã€‹ ã€ŠRè¯­è¨€å®žæˆ˜ã€‹
+    + æé«˜ï¼šã€ŠRè¯­è¨€ç¼–ç¨‹è‰ºæœ¯ã€‹ ã€Šå¤æ‚ç»Ÿè®¡æ•°æ®åˆ†æžã€‹
+    + ä¸“é¢˜ï¼šã€Šæ—¶é—´åºåˆ—åˆ†æžåŠåº”ç”¨ã€‹ ã€Šggplot2:æ•°æ®åˆ†æžä¸Žå›¾å½¢è‰ºæœ¯ã€‹
 
-## Ñ§Ï°×ÊÔ´
-
-¹úÍâ£ºgoogle, Stack Overflow, Quick-R
-
-¹úÄÚ£ºÍ³¼ÆÖ®¶¼
-
-Êé¼®£º¡¶´ÓÊý¾Ýµ½½áÂÛ¡·£¬¡¶RÓïÑÔÊµÕ½¡·£¬¡¶RÓïÑÔ±à³ÌÒÕÊõ¡·£¬¡¶¸´ÔÓÍ³¼ÆÊý¾Ý·ÖÎö¡·£¬¡¶Ê±¼äÐòÁÐ·ÖÎö¼°Ó¦ÓÃ¡·
-
-## Quick Start
+## 
+### Quick Start
 
 ```{r, eval=FALSE}
 # computation
@@ -62,9 +66,10 @@ library("ggplot2")
 ```
 
 
-# Part2: ´´½¨Êý¾Ý
+# Part2: åˆ›å»ºæ•°æ®
 
-## ÊäÈëÊý¾Ý
+## 
+### è¾“å…¥æ•°æ®
 
 ```{r, eval=FALSE}
 test <- data.frame(city=c("A","B","C"), 
@@ -79,48 +84,53 @@ C 13"
 ```
 
 
-## ÈçºÎ´ÓÍâ²¿ÎÄ¼þµ¼ÈëÊý¾Ý£¿
+## 
+### å¦‚ä½•ä»Žå¤–éƒ¨æ–‡ä»¶å¯¼å…¥æ•°æ®ï¼Ÿ
 
-**function**
+* **function**
     - read.table/read.csv
     - readLines
     - scan
 
-**package**
-    - foreign: Á¬½ÓÆäËûÀàÐÍÊý¾Ýspss/sas/stata
-    - RODBC£ºÁ¬½ÓÊý¾Ý¿â
-    - XLConnect£ºÁ¬½Óexcel
-    - XML£º´¦ÀíwebÊý¾Ý
+* **package**
+    - foreign: è¿žæŽ¥å…¶ä»–ç±»åž‹æ•°æ®spss/sas/stata
+    - RODBCï¼šè¿žæŽ¥æ•°æ®åº“
+    - XLConnectï¼šè¿žæŽ¥excel
+    - XMLï¼šå¤„ç†webæ•°æ®
 
 
 
-## µ¼Èëcsv/txtÊý¾Ý
+## 
+### å¯¼å…¥csv/txtæ•°æ®
 
 ```{r, eval=FALSE}
-# µ¼Èëcsv
+# å¯¼å…¥csv
 setwd(mydirectory) # set work directory
-# RÖÐÖ¸¶¨ÎÄ¼þÎ»ÖÃÐèÊ¹ÓÃ'/'»òÕß'\\'
-# µ¼Èëtxt
+# Rä¸­æŒ‡å®šæ–‡ä»¶ä½ç½®éœ€ä½¿ç”¨'/'æˆ–è€…'\\'
+
+# å¯¼å…¥txt
 test <- read.csv("test.csv", header = T, sep = ",")
 test <- read.table("test.txt", header = T, sep = "\t")
 test <- readLines("test.txt")
 ```
 
 
-## µ¼ÈëexcelÊý¾Ý
+## 
+### å¯¼å…¥excelæ•°æ®
 
 ```{r, eval=FALSE}
 library(XLConnect)
 wb <- loadWorkbook("test.xlsx", create = T)
 test <- readWorksheet(wb, sheet = "test")
-# Ö¸¶¨¶ÁÈ¡Êý¾ÝµÄÇøÓò
+# æŒ‡å®šè¯»å–æ•°æ®çš„åŒºåŸŸ
 test2 <- readWorksheet(wb, sheet = "test", 
                        startRow = 1, startCol = 1, 
                        endRow = 5, endCol = 4)
 ```
 
 
-## µ¼ÈëSAS/Stata/SPSSÊý¾Ý
+## 
+### å¯¼å…¥SAS/Stata/SPSSæ•°æ®
 
 ```{r, eval=FALSE}
 library(foreign)
@@ -130,20 +140,24 @@ sasdata <- read.xport("sasfile.xpt")
 ```
 
 
-## ÈçºÎ½«Êý¾Ýµ¼³ö³ÉÆäËû¸ñÊ½£¿
+## 
+### å¦‚ä½•å°†æ•°æ®å¯¼å‡ºæˆå…¶ä»–æ ¼å¼ï¼Ÿ
 
-**function** - write.table/write.csv
+- **function**: write.table/write.csv
 
-**package** - RODBC/XLConnect/XML
+- **package**: RODBC/XLConnect/XML
 
 
-## µ¼³öcsv/txt/excel
+## 
+### å¯¼å‡ºcsv/txt/excel
 ```{r, eval=FALSE}
-# µ¼³öcsv¸ñÊ½
+# å¯¼å‡ºcsvæ ¼å¼
 write.csv(test, file = "test.csv")
-# µ¼³ötxt¸ñÊ½£¬ `quote = F`È¥µôÒýºÅ
-write.table(test, file = "test.txt", quote = F) 
-# µ¼³öexcel
+
+# å¯¼å‡ºtxtæ ¼å¼ï¼Œ `quote = F`åŽ»æŽ‰å¼•å·
+write.table(test, file = "test.txt", quote = F)
+
+# å¯¼å‡ºexcel
 library(XLConnect)
 wb <- loadWorkbook("writeWorksheet.xlsx", create = TRUE)
 createSheet(wb, name = "test")
@@ -152,10 +166,11 @@ saveWorkbook(wb)
 ```
 
 
-# Part3£ºÕûÀíÊý¾Ý
+# Part3ï¼šæ•´ç†æ•°æ®
 
 
-### Ô¤ÀÀ²é¿´Êý¾Ý
+## 
+### é¢„è§ˆæŸ¥çœ‹æ•°æ®
 
 ```{r, eval=FALSE}
 fix(iris)
@@ -166,7 +181,8 @@ str(iris)
 ```
 
 
-### Êý¾ÝÀàÐÍ¼°Ïà»¥×ª»»
+## 
+### æ•°æ®ç±»åž‹åŠç›¸äº’è½¬æ¢
 
 ```{r, eval=FALSE}
 vector: c()
@@ -180,62 +196,70 @@ as.numeric()
 as.factor()
 ```
 
-### ÐÞ¸ÄÊý¾Ý
+## 
+### ä¿®æ”¹æ•°æ®
 
 ```{r, eval=FALSE}
 mydataA <- iris
-# ÖØÃüÃû
+# é‡å‘½å
 names(mydataA) <- tolower(names(mydataA))
 
-# É¾³ý¼ÇÂ¼
+# åˆ é™¤è®°å½•
 dataA[-3, ]
 
-# É¾³ý±äÁ¿"sepal.width"ºÍ"petal.width"
+# åˆ é™¤å˜é‡"sepal.width"å’Œ"petal.width"
 mydataB <- mydataA[ - c(2, 4)]
 mydataB <- mydataA[ ! (names(mydataA) %in% c("sepal.width", "petal.width") ) ]
 
-# ÐÞ¸ÄÈ¡Öµ
+# ä¿®æ”¹å–å€¼
 mydataB[3, 2] <- 0.5
 ```
 
 
 
-### É¸Ñ¡Êý¾Ý-Ñ¡Ôñ±äÁ¿
+## 
+### ç­›é€‰æ•°æ®-é€‰æ‹©å˜é‡
 
-Ñ¡Ôñ±äÁ¿ÓÐ¶àÖÖ·½Ê½£º±äÁ¿Î»ÖÃ£¬±äÁ¿Ãû£¬Âß¼­ÅÐºÍ`subset()`º¯Êý
+> - é€‰æ‹©å˜é‡æœ‰å¤šç§æ–¹å¼ï¼šå˜é‡ä½ç½®ï¼Œå˜é‡åï¼Œé€»è¾‘åˆ¤å’Œ`subset()`å‡½æ•°
 
-"sepal.length" "sepal.width"  "petal.length" "petal.width"  "species"
+> - "sepal.length" "sepal.width"  "petal.length" "petal.width"  "species"
 
 ```{r, eval=FALSE}
 # by index
 mydataB <- mydataA[c(1, 3, 5)]
 mydataB <- mydataA[, c(1, 3, 5)]
+
 # by name
 mydataB <- mydataA[c("sepal.length", "sepal.length", "species")]
+
 # by logical
 mydataB <- mydataA[c(TRUE, FALSE, TRUE, FALSE, TRUE)]
 mydataB <- mydataA[as.logical(c(1,0,1,0,1))]
 ```
 
 
-### ¸ù¾Ý±äÁ¿Ãû½øÐÐÑ¡Ôñ
+## 
+### æ ¹æ®å˜é‡åè¿›è¡Œé€‰æ‹©
 
 ```{r, eval=FALSE}
-# ±£ÁôÒ»¸ö±äÁ¿
+# ä¿ç•™ä¸€ä¸ªå˜é‡
 mydataB <- mydataA[names(mydataA) == "species"]
-# ±£Áô¶à¸ö±äÁ¿
+
+# ä¿ç•™å¤šä¸ªå˜é‡
 mydataB <- mydataA[names(mydataA) %in% 
                      c("species", "sepal.length", "sepal.width")]
-# ±ÜÃâÐ´¶ººÅ
+
+# é¿å…å†™é€—å·
 unlist(strsplit("city x1 x2 y3 y4", split = " "))
 
-# ±£ÁôÖÖÀàspeciesºÍ»¨ÝàµÄÏà¹Ø±äÁ¿(sepal¿ªÍ·µÄ)
-# ÕýÔò±í´ïÊ½
+# ä¿ç•™ç§ç±»specieså’ŒèŠ±è¼çš„ç›¸å…³å˜é‡(sepalå¼€å¤´çš„)
+# æ­£åˆ™è¡¨è¾¾å¼
 mydataB <- mydataA[grep("species|^sepal", names(mydataA))] 
 ```
 
 
-### Ê¹ÓÃ`subset()`º¯ÊýÑ¡Ôñ±äÁ¿
+## 
+### ä½¿ç”¨`subset()`å‡½æ•°é€‰æ‹©å˜é‡
 
 ```{r, eval=FALSE}
 subset(x, subset, select, drop = FALSE, ...)
@@ -243,102 +267,115 @@ subset(x, subset, select, drop = FALSE, ...)
 mydataB <- subset(mydataA, select = species )
 mydataB <- subset(mydataA, select = c(species, sepal.length, sepal.width) )
 
-# Ñ¡ÔñÒÔx¿ªÍ·µÄ±äÁ¿
+# é€‰æ‹©ä»¥xå¼€å¤´çš„å˜é‡
 mydataB <- subset(mydataA, 
                   select = grep("species|^sepal", names(mydataA))) 
 ```
 
 
-### Ò»Ð©ÓÐÓÃµÄÉ¸Ñ¡¼¼ÇÉ
+## 
+### ä¸€äº›æœ‰ç”¨çš„ç­›é€‰æŠ€å·§
 
 ```{r, eval=FALSE}
-# Ñ¡ÔñµÚÒ»¸ö±äÁ¿ºÍ×îºóÒ»¸ö±äÁ¿
+# é€‰æ‹©ç¬¬ä¸€ä¸ªå˜é‡å’Œæœ€åŽä¸€ä¸ªå˜é‡
 first_var <- mydataA[1] 
 last_var <- mydataA[ncol(mydataA)]
 ```
 
 
-### É¸Ñ¡Êý¾Ý-Ñ¡Ôñ¼ÇÂ¼
+## 
+### ç­›é€‰æ•°æ®-é€‰æ‹©è®°å½•
 
-¿ÉÒÔÊ¹ÓÃÓëÑ¡Ôñ±äÁ¿ÀàËÆµÄ·½Ê½Ñ¡Ôñ¼ÇÂ¼¡£ÈçÉ¸Ñ¡Ìõ¼þ°üº¬×Ö·ûÐÍ±äÁ¿£¬ÉÆÓÃÕýÔò±í´ïÊ½¡£
+> - é€‰æ‹©è®°å½•ä¸Žé€‰æ‹©å˜é‡ç±»ä¼¼
+> - å–„ç”¨æ­£åˆ™è¡¨è¾¾å¼ã€‚
 
 ```{r, eval=FALSE}
+# é€‰æ‹©setosaå’Œversicolorè¿™ä¸¤ç§èŠ±çš„æ•°æ®
 mydataC <- subset(mydataA, species %in% c("setosa", "versicolor") )
-# ¶àÖØÌõ¼þ£¬²¢"&", »ò"|"
+
+# å¤šé‡æ¡ä»¶ï¼Œå¹¶"&", æˆ–"|"
 mydataC <- subset(mydataA, (species=="setosa" & sepal.length>5) )
 
-# ÕýÔò±í´ïÊ½
+# æ­£åˆ™è¡¨è¾¾å¼
 mydataC <- subset(mydataA, grepl("^v", species) )
 
-# RµÄÓÅÊÆÔÚÓÚÄÜÍ¨¹ýÎ»ÖÃÑ¡È¡Êý¾Ý
+# Rçš„ä¼˜åŠ¿åœ¨äºŽèƒ½é€šè¿‡ä½ç½®é€‰å–æ•°æ®
 mydataB <- mydataA[c(1, 3, 5:20), ]
 ```
 
 
 
 
-### ÅÅÐò
+## 
+### æŽ’åº
 
-R²»Ö±½Ó¶ÔÊý¾Ý½øÐÐÅÅÐò£¬¶øÊÇ·µ»ØÅÅÐòºóµÄÊý¾Ý¼ÇÂ¼ºÅ£¬¸ù¾Ý¼ÇÂ¼ºÅÅÅÁÐÊý¾Ý
+Rä¸ç›´æŽ¥å¯¹æ•°æ®è¿›è¡ŒæŽ’åºï¼Œè€Œæ˜¯è¿”å›žæŽ’åºåŽçš„æ•°æ®è®°å½•å·ï¼Œæ ¹æ®è®°å½•å·æŽ’åˆ—æ•°æ®
 
 ```{r, eval=FALSE}
-# ·µ»ØÊý¾Ý¼ÇÂ¼ºÅ
+# è¿”å›žæ•°æ®è®°å½•å·
 order(mydataA$sepal.length, mydataA$petal.length)
 mydataB <- mydataA[ order(mydataA$sepal.length, mydataA$petal.length), ]
 
-# ¼Ó¸ººÅ "-" ±íÊ¾°´½µÐòÅÅÁÐ
+# åŠ è´Ÿå· "-" è¡¨ç¤ºæŒ‰é™åºæŽ’åˆ—
 mydataB <- mydataA[ order(-mydataA$sepal.length, -mydataA$petal.length), ]
 
-# È¥³ýÖØ¸´Öµ
+# åŽ»é™¤é‡å¤å€¼
 mydataB <- mydataA[ ! duplicated(mydataA[, c("cyl", "hp")]), ]
 ```
 
 
-### ºáÏòºÏ²¢Êý¾Ý - `merge`
+## 
+### æ¨ªå‘åˆå¹¶æ•°æ® - `merge`
 
 
 ```{r, eval=FALSE}
 dataA <- data.frame(
-    provience = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "beijing")),
+    provience = c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "beijing"),
     city = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "beijing"),
     population = seq(100, 600, 100))
+
 dataB <- data.frame(
-    provience = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong")),
+    provience = c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong"),
     city = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "guangzhou"),
     gdp = seq(30, 80, 10))
+
 dataC <- data.frame(
-    prov = I(c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong")),
+    prov = c("hubei", "hubei", "zhejiang", "zhejiang", "shanghai", "guangdong"),
     ct = c("wuhan", "yichang", "hangzhou", "ningbo", "shanghai", "guangzhou"),
     gdp = seq(30, 80, 10))
 ```
 
-### ºáÏòºÏ²¢Êý¾Ý - `merge`
+## 
+### æ¨ªå‘åˆå¹¶æ•°æ® - `merge`
 
 ```{r, eval=FALSE}
-# È«¼¯ºÏ²¢
+# å…¨é›†åˆå¹¶
 data_all <- merge(dataA, dataB, by= c("provience", "city"), all=T)
 
-# ºÏ²¢ËùÒÀ¾ÝµÄ±äÁ¿Ãû²»Ò»Ñù 
+# åˆå¹¶æ‰€ä¾æ®çš„å˜é‡åä¸ä¸€æ · 
 data_all <- merge(dataA, dataC, 
                   by.x= c("provience","city"), 
                   by.y= c("prov","ct"),all=T)
 
-# Ïò×óºÏ²¢
+# å‘å·¦åˆå¹¶
 data_all <- merge(dataA, dataB, by= c("provience", "city"), all.x=T)
-# ÏòÓÒºÏ²¢
+
+# å‘å³åˆå¹¶
 data_all <- merge(dataA, dataB, by= c("provience", "city"), all.y=T)
 ```
 
 
-### ×ÝÏòºÏ²¢Êý¾Ý - `rbind`
+## 
+### çºµå‘åˆå¹¶æ•°æ® - `rbind`
 
-Òª±£Ö¤Á½·ÝÊý¾ÝµÄ±äÁ¿ÏàÍ¬ 
+è¦ä¿è¯ä¸¤ä»½æ•°æ®çš„å˜é‡ç›¸åŒ 
 
 ```{r, eval=FALSE}
 mydata_append <- rbind(mydataA, mydataB)
 ```
 
-### ÕûºÏÊý¾Ý
+## 
+### æ•´åˆæ•°æ®
 
 ```{r}
 df3 <- data.frame(school = rep(1:3, each = 4), 
@@ -349,7 +386,8 @@ reshape(df3, idvar = c("school","class"),direction = "wide")
 ```
 
 
-### ÕûºÏÊý¾Ý - reshape2
+## 
+### æ•´åˆæ•°æ® - reshape2
 
 ```{r, eval=FALSE}
 library(reshape2)
@@ -365,71 +403,79 @@ data_w2 <- dcast(data=data_l, month + day ~ variable)
 
 
 
-# Part4: Êý¾Ý»ã×Ü
+# Part4: æ•°æ®æ±‡æ€»
 
-### Êý¾Ý
+## 
+### æ•°æ®
  
 `ChickWeight`,  weight versus age of chicks on different diets
 
-```{r, results='asis'}
+```{r}
 library(knitr)
 chickweight <- ChickWeight
 names(chickweight) <- tolower(names(chickweight))
-kable(head(chickweight), format = "html")
+head(chickweight)
 ```
 
 
-### ÆµÊý±íºÍÁÐÁª±í
+## 
+### é¢‘æ•°è¡¨å’Œåˆ—è”è¡¨
 
 ```{r, eval=FALSE}
-# Ò»Î¬µÄÆµÊý±í
+# ä¸€ç»´çš„é¢‘æ•°è¡¨
 freq_CW <- table(chickweight[, c("diet")])
 Prop_CW <- prop.table(freq_CW)
 
-# ÁÐÁª±í
+# åˆ—è”è¡¨
 freq2_CW <- table(chickweight[, c("diet", "time")])
-freq2_CW <- xtabs( ~ diet + time, chickweight) )
+freq2_CW <- xtabs( ~ diet + time, chickweight)
 ```
 
 
-### Êý¾ÝµÄÃèÊöÐÔ·ÖÎö
+## 
+### æ•°æ®çš„æè¿°æ€§åˆ†æž
 
 ```{r, eval=FALSE}
-# µ¥¸ö±äÁ¿
+# å•ä¸ªå˜é‡
 mean(chickweight$weight)
 std(chickweight$weight)
 max(chickweight$weight)
 min(chickweight$weight)
 length(chickweight$weight)
-# ¶à¸ö±äÁ¿
+
+# å¤šä¸ªå˜é‡
 sapply(chickweight[c("weight", "time")], mean)
-# ¶ÔÕû¸öÊý¾ÝµÄÃèÊöÐÔ·ÖÎö
+
+# å¯¹æ•´ä¸ªæ•°æ®çš„æè¿°æ€§åˆ†æž
 summary(chickweight[c("weight", "time")])
 ```
 
 
-### ·ÖÀà»ã×Ü
+## 
+### åˆ†ç±»æ±‡æ€»
   
 ```{r, eval=FALSE}
-# µ¥¸öÃèÊö±äÁ¿ ~ µ¥¸ö·ÖÀà±äÁ¿
+# å•ä¸ªæè¿°å˜é‡ ~ å•ä¸ªåˆ†ç±»å˜é‡
 tapply(chickweight$weight, chickweight$diet, mean)
-# µ¥¸öÃèÊö±äÁ¿ ~ ¶à¸ö·ÖÀà±äÁ¿
+
+# å•ä¸ªæè¿°å˜é‡ ~ å¤šä¸ªåˆ†ç±»å˜é‡
 aggregate(chickweight[c("weight", "time")], by=list(diet=chickweight$diet), mean)
 
-# ¶à¸öÃèÊö±äÁ¿ ~ ¶à¸ö·ÖÀà±äÁ¿£¬µ¥¸öÖ¸±ê
+# å¤šä¸ªæè¿°å˜é‡ ~ å¤šä¸ªåˆ†ç±»å˜é‡ï¼Œå•ä¸ªæŒ‡æ ‡
 aggregate( weight ~ diet, data = chickweight, mean)
 aggregate( weight ~ diet + time, data = chickweight, sum)
 aggregate( cbind(weight, chick) ~ diet, data = chickweight, mean)
 aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, sd)
 
-# ¶à¸öÃèÊö±äÁ¿ ~ ¶à¸ö·ÖÀà±äÁ¿£¬¶à¸öÖ¸±ê
+# å¤šä¸ªæè¿°å˜é‡ ~ å¤šä¸ªåˆ†ç±»å˜é‡ï¼Œå¤šä¸ªæŒ‡æ ‡
 ind_stat <- function(x) (c (m= mean(x), s=sum(x)))
 aggregate( cbind(weight, chick) ~ diet + time, data = chickweight, ind_stat)
 
 ```
 
 
-### Êý¾ÝµÄÃèÊöÐÔ·ÖÎö - ÀûÓÃreshape2
+## 
+### æ•°æ®çš„æè¿°æ€§åˆ†æž - åˆ©ç”¨reshape2
 
 ```{r, eval=FALSE}
 library(reshape2)
@@ -447,7 +493,8 @@ cast(chick_m, diet + time + variable ~ ., ind_stat)
 ```
 
 
-### ÏßÐÔ»Ø¹é
+## 
+### çº¿æ€§å›žå½’
 
 ```{r}
 # R
@@ -457,63 +504,76 @@ summary(M1)
 
 
 
-# Part5: ¿ÉÊÓ»¯Êý¾Ý - ggplot2
+# Part5: å¯è§†åŒ–æ•°æ® - ggplot2
 
 
-### ºÄÓÍÁ¿Êý¾Ý
+## 
+### è€—æ²¹é‡æ•°æ®
 
-```{r, results='asis'}
+```{r}
 library(ggplot2);library(knitr)
-kable(head(mpg), format = "html")
+head(mpg)
 ```
 
+## 
 ### Quick Start - ggplot2
 
 ```{r}
 library(ggplot2)
-## ÓÃ²»Í¬µÄÑÕÉ«±ê×¢±äÆø¸×Êý
+## ç”¨ä¸åŒçš„é¢œè‰²æ ‡æ³¨å˜æ°”ç¼¸æ•°
 qplot(displ, hwy, data = mpg, color = factor(cyl))
+```
 
-## ÓÃ²»Í¬µÄÐÎ×´±ê×¢±äÆø¸×Êý
+
+## 
+
+```{r}
+## ç”¨ä¸åŒçš„å½¢çŠ¶æ ‡æ³¨å˜æ°”ç¼¸æ•°
 qplot(displ, hwy, data = mpg, shape = factor(cyl))
+```
 
-## Ìí¼ÓÏßÐÔ»Ø¹éÄâºÏÇúÏß
+## 
+
+```{r}
+## æ·»åŠ çº¿æ€§å›žå½’æ‹Ÿåˆæ›²çº¿
 p = qplot(displ, hwy, data = mpg, color = factor(cyl))
 p + geom_smooth(method="lm") # smoothing line
 ```
 
 
-### »ù±¾Í¼ÐÎ - ggplot2
+## 
+### åŸºæœ¬å›¾å½¢ - ggplot2
 
 ```{r, eval=FALSE}
 library(ggplot2)
-## É¢µãÍ¼
+## æ•£ç‚¹å›¾
 qplot(displ, hwy, data = mpg)
 
-## ÏäÐÍÍ¼
+## ç®±åž‹å›¾
 qplot(class, hwy, data = mpg, geom = "boxplot")
 
-## ÖùÐÎÍ¼ 
+## æŸ±å½¢å›¾ 
 qplot(hwy, data = mpg, geom = "bar")
 
-## Ö±·½Í¼ºÍÃÜ¶ÈÇúÏßÍ¼
+## ç›´æ–¹å›¾å’Œå¯†åº¦æ›²çº¿å›¾
 qplot(hwy, data = mpg, geom = c("histogram"))
 qplot(hwy, data = mpg, geom = c("density"), color = factor(year))
 ```
 
-### ÖÐ¼¶Í¼ÐÎ - ggplot2
+## 
+### ä¸­çº§å›¾å½¢ - ggplot2
 
 ```{r, eval=FALSE}
 library(ggplot2)
 
-## ²ÎÊýÉèÖÃºÍÍ¼ÐÎµþ¼Ó
+## å‚æ•°è®¾ç½®å’Œå›¾å½¢å åŠ 
 p <- ggplot(mpg, aes(class,hwy)) 
 p + geom_boxplot(aes(fill=class),alpha=0.5)+  
     geom_point(position='jitter',color='grey30')+
     theme(legend.position='none') 
 
 
-## ·ÖÃæ
+## åˆ†é¢
 p  <- ggplot(mpg,aes(x=hwy)) 
 p + geom_histogram(aes(fill=factor(year), y=..density..), 
                    alpha=0.5, color = "black") + 
@@ -524,13 +584,14 @@ p + geom_histogram(aes(fill=factor(year), y=..density..),
 ```
 
 
-# Part6: Êä³ö±¨¸æ
+# Part6: è¾“å‡ºæŠ¥å‘Š
 
-------
+## 
 ![knitr](figure/knitr.png)
 
 
-### ÎÄ×ÖºÍ´úÂë»ì±à
+## 
+![knitr-example](figure/example-knitr.png)
 
 
 
