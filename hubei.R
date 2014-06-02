@@ -2,20 +2,19 @@ setwd("E:\\SupStat\\Project\\CTCC\\2.data")
 
 library(ggplot2)
 # part1: 数据清洗
-testdata <- read.csv("E:\\SupStat\\Project\\CTCC\\2.data\\80万用户清单\\201404月80万清单.csv", 
+testdata <- read.csv("E:\\SupStat\\Project\\CTCC\\2.data\\80万用户清单\\稳定用户清单-0602.csv", 
                      header = T)
-summary(testdata2[, c(1:11,36:37,113:126)])
-names(testdata)
-library(ggplot2)
+names(testdata) <- c(names(testdata2), "注册终端价格", "新增积分", "兑换积分", "话费补贴")
+save(testdata, file = "testdata0602.RData")
+
 qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否参加终补促销 , position="dodge")
 
 write.csv(table(testdata[, c("本地网标识")]),"本地网.csv")
 write.csv(table(testdata[, c("本地网名称")]),"本地网ming.csv")
 table(testdata[, c("本地网名称")])
 
-names(testdata) <- names(testdata2)
 set.seed(70)
-testdata2 <- testdata[sample(1:dim(testdata)[1], 80000), ]
+testdata2 <- subset(testdata, 账务月 == "201404")
 save(testdata2, file = "testdata2.RData")
 save(testdata, file = "testdata.RData")
 
@@ -23,11 +22,11 @@ save(testdata, file = "testdata.RData")
 # 重排数据
 # 名义指标和二分指标
 ## 增加新变量：武汉标识
-summary(testdata2[, 127])
 testdata2[testdata2[, "本地网标识"]==1001, "是否武汉"] <- TRUE
 testdata2[testdata2[, "本地网标识"]!=1001, "是否武汉"] <- FALSE
-class_var <- c(1:2, 123:127, 3:7, 9:14, 22:30, 94:95, 101:104, 114)
-testdata <- testdata2[, c(class_var, which(! 1:126 %in% class_var))]
+class_var <- c(1:2, 123:126, 131, 3:7, 9:14, 22:30, 94:95, 101:104, 114)
+testdata <- testdata2[, c(class_var, which(! 1:131 %in% class_var))]
+rm(testdata2)
 summary(testdata)
 
 # 检查指标缺失情况
@@ -39,191 +38,150 @@ for (g in c(10:16,18:20,22:24,26:34)){
   print(table(testdata[,g])/nrow(testdata))
 }
 
-write.csv(names(testdata[, 1:34]), "缺失检查名.csv")
+# write.csv(names(testdata[, 1:34]), "缺失检查名.csv")
 
 # 去掉异常值
+qplot(稳定用户标识, 注册终端价格, data = testdata, geom = "jitter", alpha = I(1/5))
+qplot(注册终端价格 , data = testdata, geom = "density", color = 稳定用户标识)
+qplot(话费补贴 , data = testdata, geom = "density", color = 稳定用户标识)
+qplot(稳定用户标识, data = testdata, geom = "bar", fill =是否参加话补促销 , position="dodge")
 
-apply(testdata[, 35:36], 2, function(x){
-  c(median=median(x), iqr=quantile(x, 0.75)-quantile(x, 0.25))
-})
-n <- 17; fac <- factor(rep(1:3, length = n), levels = 1:5)
-table(fac)
-tapply(1:n, fac, sum)
-summary(testdata[, 36:107])
+testdata <- subset(testdata, 终端换机次数<=50 & 套餐保底消费金额<=750 & 流量包限额<=5000 & 捆绑销售终端价格<8000 & 注册终端价格>0)
+# apply(testdata[, 35:36], 2, function(x){
+#   c(median=median(x), iqr=quantile(x, 0.75)-quantile(x, 0.25))
+# })
 
 
-# 去掉取值没有具体含义的变量(取值为"未知"的比例太高)
-testdata <- testdata[, ! names(testdata) %in% c("用户促销实例到期时间","第二级套餐名称", "定价计划标识", "大类偏好","大类偏好.1", "内容偏好")]
-
-# 设定基本筛选标准
-qplot(稳定用户标识, 捆绑销售终端价格, data = testdata, geom = "jitter", alpha = I(1/5))
-
-qplot(捆绑销售终端价格, data = subset(testdata, 捆绑销售终端价格==0), 
-      geom = "histogram", fill = 是否捆绑终端)
-testdata <- subset(testdata, 捆绑销售终端价格<8000) ## 大部分为0，捆绑的价格中60%以上的价格为0, 该变量可以去除
-
-qplot(log(预存款准备率), data = subset(testdata, 预存款准备率<200 & 预存款准备率 >0), 
-      geom = "histogram", fill = 稳定用户标识)
-testdata[testdata[, "预存款准备率"]<0, "预存款准备率"] <- min(testdata[testdata[, "预存款准备率"]>0, "预存款准备率"])
-
-qplot(log(用户ARPU), data = subset(testdata, 用户ARPU<2000 & 用户ARPU >-2279), 
-      geom = "histogram", fill = 稳定用户标识)
-testdata[testdata[, "用户ARPU"]<0, "用户ARPU"] <- min(testdata[testdata[, "用户ARPU"]>0, "用户ARPU"])
-
-qplot(用户ARPU趋势, data = subset(testdata, 用户ARPU趋势<5 & 用户ARPU趋势 >=0), 
-      geom = "histogram", fill = 稳定用户标识)
-testdata <- subset(testdata, 用户ARPU趋势<5 & 用户ARPU趋势 >=0)
-testdata[testdata[, "用户ARPU趋势"]==0, "用户ARPU趋势"] <- 0.0001
-
-qplot(增值业务费用, data = subset(testdata, 增值业务费用<300 & 增值业务费用 >=0), 
-      geom = "histogram", fill = 稳定用户标识)
-qplot(稳定用户标识, 增值业务费用, data = testdata, geom = "jitter", alpha = I(1/5))
-testdata <- subset(testdata, 增值业务费用<300 & 增值业务费用 >=0)
-testdata[testdata[, "增值业务费用"]==0, "增值业务费用"] <- 0.0001
-
-testdata <- subset(testdata, 增值业务费用占比<=1 & 增值业务费用 >=0)
-testdata[testdata[, "增值业务费用占比"]==0, "增值业务费用占比"] <- 0.0001
-
-qplot(稳定用户标识, 套餐保底消费金额, data = testdata, geom = "boxplot", alpha = I(1/5))
-qplot(套餐保底消费金额, data = subset(testdata, 套餐保底消费金额<750 & 套餐保底消费金额 >=0), 
-      geom = "histogram", fill = 稳定用户标识)
-testdata <- subset(testdata, 套餐保底消费金额<750) 
-
-qplot(稳定用户标识, 当月赠送款余额, data = testdata, geom = "jitter", alpha = I(1/5))
-qplot(稳定用户标识, 终端换机次数, data = testdata, geom = "jitter", alpha = I(1/5))
-testdata <- subset(testdata, 终端换机次数<=50) 
-
-qplot(稳定用户标识, 流量包限额, data = testdata, geom = "boxplot", alpha = I(1/5))
-q
-qplot(当月赠送款余额, data = subset(testdata, 当月赠送款余额<500 & 当月赠送款余额 >=-350), 
-      geom = "histogram", fill = 稳定用户标识)
+# 去掉占比指标
+aa <- names(testdata)
+aa1 <- !grepl("*.占比",aa) 
+testdata <- testdata[, aa1]
+rm(aa);rm(aa1)
 
 
 # 把0设定为0.0001, 进行对数化处理
-names(testdata)
 summary(testdata)
 testdata_log <- testdata
-for (i in 35:107){
+for (i in 35:111){
   testdata_log[testdata_log[, i] < 0, i] <- 0.0001
   testdata_log[testdata_log[, i] == 0, i] <- 0.001
 }
+testdata_log[, 35:111] <- log(testdata_log[, 35:111])
+qplot(新增积分 , data = testdata_log, geom = "density", color = 稳定用户标识)
+qplot(话费补贴 , data = testdata_log, geom = "density", color = 稳定用户标识)
 
-testdata_log[, 35:107] <- log(testdata_log[, 35:107])
-summary(testdata_log)
-qplot(总通话次数 , data = testdata_log, geom = "density", color = 稳定用户标识)
 
 # 相关性分析
 library(corrplot)
 names(testdata)
 M <- cor(testdata[, c(6, 45:57)])
 corrplot(M, method = "circle")
-corrplot(M, method = "ellipse")
-corrplot.mixed(M)
 corrplot(M, order = "hclust", addrect = 3)
 
-M <- cor(testdata[, c(6, 45:57)])
-
-# 去掉占比指标
-aa <- names(testdata)
-aa1 <- !grepl("*.占比",aa) 
-testdata <- testdata[, aa1]
-summary(testdata)
-
-names(testdata)
 M <- cor(testdata[, c(6, 45:59,63:69)])
 corrplot(M, method = "circle")
-corrplot(M, method = "ellipse")
-corrplot.mixed(M)
 corrplot(M, order = "hclust", addrect = 5)
+
 
 # 计算相关系数
 ## 对数相关系数
-aa <- testdata_log[, c(7, 13:14, 18, 22:24, 26:27, 35:107)]
-summary(aa)
-cor_var <- cor(testdata_log[, c(7, 13:14, 18, 22:24, 26:27, 35:107)], testdata_log[, 6])
+cor_var <- cor(testdata_log[, c(7, 13:14, 18, 22:24, 26:27, 35:111)], testdata_log[, 6])
 cor_var <- cor_var[ order(-abs(cor_var[, 1])), ]
 write.csv(cor_var, "cor_var.csv")
 ## 原始相关系数
-cor_var1 <- cor(testdata[, c(7, 13:14, 18, 22:24, 26:27, 35:107)], testdata[, 6])
+cor_var1 <- cor(testdata[, c(7, 13:14, 18, 22:24, 26:27, 35:111)], testdata[, 6])
 cor_var1 <- cor_var1[ order(-abs(cor_var1[, 1])), ]
 write.csv(cor_var1, "cor_var1.csv")
 
-paste(names(head(cor_var, 20)), collapse = " + ")
 
-cor_matrix <- cor(testdata_log[, names(head(cor_var, 20))])
-
-
-## 随机森林挑选重要变量
+## 计算重要度--随机森林
 library(randomForest)
-rm(x)
-rm(y)
-set.seed(71)
-names(testdata)
+x <- as.matrix(testdata[, c(7, 13:14, 18, 22:24, 26:27, 35:111)])
+y <- factor(testdata[,6])
 set.seed(17)
-iid <- sample(1:80000,10000)
-x <- as.matrix(testdata[iid, c(7, 13:14, 18, 22:24, 26:27, 35:107)])
-y <- factor(testdata[iid,6])
 iris.rf <- randomForest(x, y ,
-                        importance=TRUE,
-                        proximity=TRUE, ntree = 50)
+                        importance=TRUE, ntree = 50)
 ## Look at variable importance:
 write.csv(round(importance(iris.rf, type=2), 2), "rf_impt.csv")
 varImpPlot(iris.rf, main="随机森林重要度-原始值")
 
-iid <- sample(1:80000,10000)
-x <- as.matrix(testdata_log[iid, c(7, 13:14, 18, 22:24, 26:27, 35:107)])
-y <- factor(testdata_log[iid,6])
+set.seed(17)
+x <- as.matrix(testdata_log[, c(7, 13:14, 18, 22:24, 26:27, 35:111)])
+y <- factor(testdata_log[,6])
+set.seed(17)
 iris.rf <- randomForest(x, y ,
-                        importance=TRUE,
-                        proximity=TRUE, ntree = 50)
+                        importance=TRUE, ntree = 50)
 ## Look at variable importance:
 write.csv(round(importance(iris.rf), 2), "rf_impt_log.csv")
 varImpPlot(iris.rf, main="随机森林重要度-取对数")
 
-testdata <- subset(testdata, 终端换机次数<=50 & 套餐保底消费金额<=750 & 流量包限额<=5000 & 捆绑销售终端价格<8000)
+
 
 
 # 选取重要指标
 
-select_name <- readLines(textConnection(
-"稳定交往圈个数
-本地被叫次数
-本地被叫时长
-被叫号码个数
-网内号码个数
-网间通话次数
-终端换机次数
-总通话次数
-总通话时长
-当月赠送款余额
-近六个月平均缴费金额
-距离协议到期时长
-近六月累计短厅查询次数
-剩余积分
-用户ARPU
-套餐保底消费金额
-流量包限额
-捆绑销售终端价格
-预存款准备率
-约定协议时长
-本地主叫时长
-语音交往圈个数趋势
-增值业务费用
-零通话天数"))
+# select_name <- readLines(textConnection(
+# "稳定交往圈个数
+# 本地被叫次数
+# 本地被叫时长
+# 被叫号码个数
+# 网内号码个数
+# 网间通话次数
+# 终端换机次数
+# 总通话次数
+# 总通话时长
+# 当月赠送款余额
+# 近六个月平均缴费金额
+# 距离协议到期时长
+# 近六月累计短厅查询次数
+# 剩余积分
+# 用户ARPU
+# 套餐保底消费金额
+# 流量包限额
+# 捆绑销售终端价格
+# 预存款准备率
+# 约定协议时长
+# 本地主叫时长
+# 语音交往圈个数趋势
+# 增值业务费用
+# 零通话天数"))
 
+select_name <- readLines(textConnection(
+  "稳定交往圈个数
+剩余积分
+距离协议到期时长
+终端换机次数
+零通话天数
+被叫号码个数
+当月赠送款余额
+本地被叫次数
+近六月累计短厅查询次数
+本地被叫时长
+新增积分
+约定协议时长
+用户ARPU
+近六月累计缴费金额
+近六月累计缴费次数
+流量包限额
+套餐保底消费金额
+预存款准备率
+是否参加终补促销
+是否融合
+是否快消品
+距离上次缴费时长
+话费补贴
+捆绑销售终端价格
+注册终端价格"))
 
 testdata_mod <- subset(testdata, select = c("稳定用户标识",select_name))
-summary(testdata_mod)
-
-library(ggplot2)
-testdata_mod <- subset(testdata_mod, 终端换机次数<=50 & 套餐保底消费金额<=750 & 流量包限额<=5000 & 捆绑销售终端价格<8000)
 testdata_mod$稳定用户标识 <- factor(testdata_mod$稳定用户标识)
+# 再次检查数据
 qplot(稳定用户标识,  流量包限额 , data = testdata, geom = "jitter", alpha = I(1/3))
 qplot(log(剩余积分), data = testdata, geom = "histogram", fill = 稳定用户标识)
 
 testdata_mod_log <- testdata_mod
 names(testdata_mod_log)
-for (i in 2:25){
+for (i in 2:26){
   testdata_mod_log[testdata_mod_log[, i] < 0, i] <- 0.0001
   testdata_mod_log[testdata_mod_log[, i] == 0, i] <- 0.001
   testdata_mod_log[, i] <- log(testdata_mod_log[, i])
@@ -231,10 +189,10 @@ for (i in 2:25){
 summary(testdata_mod_log)
 
 # 区分测试集和数据集
+set.seed(80)
 mod <- sample(2, nrow(testdata_mod), replace = TRUE, prob=c(0.8, 0.2))
-       
 
-paste(select_name, collapse = " + ")
+# 算法一：Logit回归
 fit <- glm(稳定用户标识 ~ ., family=binomial(link=logit), data=testdata_mod_log[mod==1,])
 summary(fit) # display results
 summary(fit) # display results
@@ -256,8 +214,7 @@ perf1 <- performance(pred, "lift", "rpp")
 plot(perf1)
 
 
-
-# 决策树
+# 算法二：决策树
 library(rpart)
 library(rpart.plot)
 
@@ -288,8 +245,7 @@ plot(perf1)
 
 
 
-# 随机森林
-rm(predict_all)
+# 算法三：随机森林
 library(randomForest)
 set.seed(80)
 iris.rf <- randomForest(稳定用户标识 ~ ., 
@@ -349,12 +305,13 @@ qplot(约定协议时长, data = testdata_mod, geom = "density", fill = 稳定性分层, al
 qplot(约定协议时长, data = testdata_mod, geom = "density", fill = 稳定用户标识, alpha = I(1/3))
 
 # 分层特征刻画
-
-names(test_aa)
-test_class <- testdata[, c(1:5, 7:34)]
-head(test_class)
-test_class$id <- rownames(test_class)
+rm(testdata_cl)
+# names(testdata)
+ test_class <- testdata[, c(1:5, 7:34, 47, 49, 76, 86, 90:93)]
+# head(test_class)
+# test_class$id <- rownames(test_class)
 test_wd <- testdata_mod[, c("稳定性打分","稳定性分层")]
+save(test_wd, "test_wd.RData")
 test_wd$id <- rownames(test_wd)
 test_aa <- merge(test_class, test_wd)
 
@@ -389,6 +346,44 @@ qplot(稳定性分层, data = test_aa, geom = "bar", fill =大类偏好 , position="fill"
 qplot(稳定性分层, data = test_aa, geom = "bar", fill =缴费方式偏好 , position="dodge")
 qplot(稳定性分层, data = test_aa, geom = "bar", fill =缴费方式偏好 , position="fill")
 test
+
+# 聚类
+names(test_aa)
+summary(testdata_mod)
+# 仅选定少部分变量
+library(corrplot)
+M <- cor(testdata_mod[, 2:25])
+corrplot(M, method = "circle")
+corrplot.mixed(M)
+corrplot(M, order = "hclust", addrect = 3)
+# 聚类之前的检查工作
+qplot(稳定用户标识, 增值业务费用  , data = testdata_mod, geom = "jitter", alpha = I(1/3))
+sel_cl <- c("稳定性分层", "稳定交往圈个数", "本地被叫次数", "本地被叫时长", "终端换机次数", "当月赠送款余额","近六个月平均缴费金额",
+  "距离协议到期时长","近六月累计短厅查询次数","剩余积分","用户ARPU","套餐保底消费金额","流量包限额","捆绑销售终端价格",
+  "约定协议时长","增值业务费用")
+testdata_cl <- subset(testdata_mod, 本地被叫次数<=1000 &
+                        本地被叫时长<=1000 &
+                        终端换机次数<=30 &
+                        当月赠送款余额<=10000 &
+                        近六个月平均缴费金额<=10000 &
+                        距离协议到期时长<=60 &
+                        近六月累计短厅查询次数<=500 &
+                        剩余积分<=30000 &
+                        用户ARPU<=500 & 
+                        增值业务费用<=200,
+                        select=sel_cl)
+# 聚类细分
+# A稳定用户-高等级 B稳定用户-中等级 C稳定用户-低等级 D非稳定用户-高等级 E非稳定用户-中等级 F非稳定用户-低等级
+testdata_cl_0 <- subset(testdata_cl, 稳定性分层=="A稳定用户-高等级")  
+x <- scale(testdata_cl_0[-1])
+(centered.x <- scale(testdata_cl_0[-1], scale = FALSE))
+(cl <- kmeans(x, 3, nstart = 25))
+cl$size
+
+aggregate(x,by=list(cl$cluster),FUN=mean)
+cl$centers
+apply(testdata_cl_0[-1], 2, mean)
+apply(testdata_cl_0[-1], 2, sd)
 
 
 
