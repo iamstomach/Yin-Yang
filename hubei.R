@@ -276,21 +276,27 @@ plot(perf1)
 predict_all <- predict(iris.rf, testdata_mod, type = "prob")
 
 testdata_mod$稳定性打分 <- predict_all[, 2]
-
+all_q <- quantile(testdata_mod[, "稳定性打分"], c(0.3, 0.7))
 high_q <- quantile(testdata_mod[ testdata_mod$稳定用户标识=="TRUE", "稳定性打分"], c(0.2, 0.8))
 low_q <- quantile(testdata_mod[ testdata_mod$稳定用户标识=="FALSE", "稳定性打分"], c(0.2, 0.8))
 summary(testdata_mod[ testdata_mod$稳定用户标识=="FALSE", "稳定性打分"])
 
-testdata_mod[testdata_mod$稳定用户标识=="TRUE" & testdata_mod$稳定性打分 > high_q[2], "稳定性分层"] <- "A稳定用户-高等级"
+testdata_mod[testdata_mod$稳定用户标识=="TRUE" & testdata_mod$稳定性打分 >= high_q[2], "稳定性分层"] <- "A稳定用户-高等级"
 testdata_mod[testdata_mod$稳定用户标识=="TRUE" & testdata_mod$稳定性打分 >= high_q[1] & 
-               testdata_mod$稳定性打分 <= high_q[2] , "稳定性分层"] <- "B稳定用户-中等级"
+               testdata_mod$稳定性打分 < high_q[2] , "稳定性分层"] <- "B稳定用户-中等级"
 testdata_mod[testdata_mod$稳定用户标识=="TRUE" & testdata_mod$稳定性打分 <= high_q[1] , "稳定性分层"] <- "C稳定用户-低等级"
 testdata_mod[testdata_mod$稳定用户标识=="FALSE" & testdata_mod$稳定性打分 > low_q[2] , "稳定性分层"] <- "D非稳定用户-高等级"
 testdata_mod[testdata_mod$稳定用户标识=="FALSE" & testdata_mod$稳定性打分 > low_q[1] & 
                testdata_mod$稳定性打分 < low_q[2] , "稳定性分层"] <- "E非稳定用户-中等级"
 testdata_mod[testdata_mod$稳定用户标识=="FALSE" & testdata_mod$稳定性打分 <= low_q[1], "稳定性分层"] <- "F非稳定用户-低等级"
-table(testdata_mod$稳定用户标识, testdata_mod$稳定性分层)
 
+testdata_mod[testdata_mod$稳定性打分 >= all_q[2], "稳定性分层2"] <- "A高稳定"
+testdata_mod[testdata_mod$稳定性打分 > all_q[1] & 
+                 testdata_mod$稳定性打分 < all_q[2] , "稳定性分层2"] <- "B中稳定"
+testdata_mod[testdata_mod$稳定性打分 <= all_q[1], "稳定性分层2"] <- "C低稳定"
+
+table(testdata_mod$稳定性分层2)
+  
 
 
 names(testdata_mod)
@@ -317,18 +323,34 @@ test_aa <- merge(test_class, test_wd)
 
 paste(select_name, collapse = ",")
 ind_stat<-function(x)(c(IQR=paste(quantile(x, 0.25), quantile(x, 0.75),sep="~")))
-summary1 <- aggregate(cbind(稳定交往圈个数,距离协议到期时长,剩余积分,用户ARPU,套餐保底消费金额,流量包限额,
-                            捆绑销售终端价格,约定协议时长)~ 稳定用户标识 + 稳定性分层,data=testdata_mod,ind_stat)
-summary2 <- aggregate(cbind(是否捆绑终端,是否vpn,是否融合,是否快消品,是否参加终补促销,是否参加话补促销)~ 稳定性分层,data=test_aa,mean)
+summary1 <- aggregate(.~ 稳定用户标识 + 稳定性分层,data=testdata_mod,ind_stat)
+summary2 <- aggregate(.~ 稳定性分层,data=testdata_mod,mean)
 write.csv(summary1, "summary1.csv")
 write.csv(summary2, "summary2.csv")
 
-summary(test_aa)
-qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否参加终补促销 , position="dodge")
-qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否参加终补促销 , position="fill")
+names(testdata_mod)
+summary(testdata_mod)
+library(ggplot2)
+save(testdata_mod, file = "testdata_mod0603.RData")
 
-qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否校园用户 , position="dodge")
-qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否校园用户 , position="fill")
+testdata_mod_gg <- testdata_mod
+for (i in c(3:19,24:26)){
+  testdata_mod_gg[testdata_mod_gg[, i] < 0, i] <- 0.0001
+  testdata_mod_gg[testdata_mod_gg[, i] == 0, i] <- 0.001
+  testdata_mod_gg[, i] <- log(testdata_mod_gg[, i])
+}
+log(0.001)
+summary(testdata_mod_gg)
+testdata_mod_gg$稳定性分层 <- factor(testdata_mod_gg$稳定性分层)
+qplot(用户ARPU, data = testdata_mod_gg, geom = "density", color = 稳定性分层2, alpha = I(1/3))
+qplot(捆绑销售终端价格, data = subset(testdata_mod, 是否参加终补促销==T), geom = "density", color = 稳定性分层2, alpha = I(1/3))
+qplot(话费补贴, data = subset(testdata_mod, 话费补贴<3000), geom = "density", color = 稳定性分层2, alpha = I(1/3))
+
+qplot(稳定性分层2, data = testdata_mod_gg, geom = "bar", fill =是否快消品 , position="dodge")
+qplot(稳定性分层2, data = testdata_mod_gg, geom = "bar", fill =是否快消品 , position="fill")
+
+qplot(稳定性分层, data = testdata_mod_gg, geom = "bar", fill =距离上次缴费时长 , position="dodge")
+qplot(稳定性分层, data = testdata_mod_gg, geom = "bar", fill =距离上次缴费时长 , position="fill")
 
 qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否捆绑终端 , position="dodge")
 qplot(稳定性分层, data = test_aa, geom = "bar", fill =是否捆绑终端 , position="fill")
@@ -348,11 +370,11 @@ qplot(稳定性分层, data = test_aa, geom = "bar", fill =缴费方式偏好 , position="f
 test
 
 # 聚类
-names(test_aa)
+names(testdata_mod)
 summary(testdata_mod)
 # 仅选定少部分变量
 library(corrplot)
-M <- cor(testdata_mod[, 2:25])
+M <- cor(testdata_mod[, 2:26])
 corrplot(M, method = "circle")
 corrplot.mixed(M)
 corrplot(M, order = "hclust", addrect = 3)
@@ -361,26 +383,38 @@ qplot(稳定用户标识, 增值业务费用  , data = testdata_mod, geom = "jitter", alpha 
 sel_cl <- c("稳定性分层", "稳定交往圈个数", "本地被叫次数", "本地被叫时长", "终端换机次数", "当月赠送款余额","近六个月平均缴费金额",
   "距离协议到期时长","近六月累计短厅查询次数","剩余积分","用户ARPU","套餐保底消费金额","流量包限额","捆绑销售终端价格",
   "约定协议时长","增值业务费用")
-testdata_cl <- subset(testdata_mod, 本地被叫次数<=1000 &
+
+testdata_cl0 <- subset(testdata_mod, 本地被叫次数<=1000 &
                         本地被叫时长<=1000 &
                         终端换机次数<=30 &
                         当月赠送款余额<=10000 &
-                        近六个月平均缴费金额<=10000 &
+                        近六月累计缴费金额<=50000 &
                         距离协议到期时长<=60 &
                         近六月累计短厅查询次数<=500 &
                         剩余积分<=30000 &
-                        用户ARPU<=500 & 
-                        增值业务费用<=200,
-                        select=sel_cl)
+                        用户ARPU<=500)
+testdata_cl <- testdata_cl0[, 2:26]
+
 # 聚类细分
 # A稳定用户-高等级 B稳定用户-中等级 C稳定用户-低等级 D非稳定用户-高等级 E非稳定用户-中等级 F非稳定用户-低等级
 testdata_cl_0 <- subset(testdata_cl, 稳定性分层=="A稳定用户-高等级")  
-x <- scale(testdata_cl_0[-1])
+c <- scale(testdata_cl)
 (centered.x <- scale(testdata_cl_0[-1], scale = FALSE))
-(cl <- kmeans(x, 3, nstart = 25))
-cl$size
+(cl <- kmeans(x, 6, nstart = 25))
+cl$size/nrow(testdata_cl1)
+summary(x)
 
-aggregate(x,by=list(cl$cluster),FUN=mean)
+aa <- factor(cl$cluster)
+testdata_cl1 <- cbind(testdata_cl0, aa)
+head(testdata_cl1)
+aggregate(testdata_cl0,by=list(cl$cluster),FUN=mean)
+qplot(稳定性打分,data=testdata_cl1, geom = "density", color = aa, alpha = I(1/3))
+
+testdata_cl1[testdata_cl1$稳定性打分 >= 0.5, "稳定性预测"] <- "稳定"
+testdata_cl1[testdata_cl1$稳定性打分 < 0.5, "稳定性预测"] <- "非稳定"
+
+table(testdata_cl1$aa, testdata_cl1$稳定性预测)
+save(testdata_cl1, file = "testdata_聚类0607.RData")
 cl$centers
 apply(testdata_cl_0[-1], 2, mean)
 apply(testdata_cl_0[-1], 2, sd)
